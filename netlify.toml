@@ -1,0 +1,12 @@
+# ════════════════════════════════════════════════════════════════
+#  The Rugby Club Directory — netlify.toml
+#  Edge Function: injects unique Yoast-style SEO per page
+# ════════════════════════════════════════════════════════════════
+
+[build]
+  publish = "."
+
+# Edge function runs on every request to inject server-side SEO
+[[edge_functions]]
+  function = "seo"
+  path     = "/*"

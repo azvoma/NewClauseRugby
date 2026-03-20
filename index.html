@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Rugby Near Me – Find a Rugby Club | UK Rugby Club Directory</title>
+<meta name="description" content="Find a rugby club near you. Search 773 rugby union clubs, rugby league teams and rugby businesses across England, Scotland, Wales and Northern Ireland. Every club has its own free profile page with contact details and directions.">
+<meta name="keywords" content="rugby near me, find a rugby club, rugby clubs near me, rugby union clubs UK, rugby league clubs UK, local rugby teams, grassroots rugby, junior rugby clubs, women's rugby, rugby club directory UK, amateur rugby, rugby union England, rugby union Wales, rugby union Scotland, northern ireland rugby clubs">
+<meta name="robots" content="index,follow">
+<meta name="author" content="UK Rugby Club Directory">
+<meta name="application-name" content="UK Rugby Club Directory">
+<meta name="theme-color" content="#0a1628">
+<meta name="geo.region" content="GB">
+<meta name="geo.placename" content="United Kingdom">
+<link id="canonical" rel="canonical" href="https://ukrugbyclubdirectory.co.uk/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="UK Rugby Club Directory">
+<meta property="og:title" content="Rugby Near Me – Find a Rugby Club | UK Rugby Club Directory">
+<meta property="og:description" content="Find a rugby club near you. Search 773 rugby union clubs, rugby league teams and rugby businesses across England, Scotland, Wales and Northern Ireland.">
+<meta property="og:url" content="https://ukrugbyclubdirectory.co.uk/">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://ukrugbyclubdirectory.co.uk/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@UKRugbyClubs">
+<meta name="twitter:title" content="Rugby Near Me – Find a Rugby Club | UK Rugby Club Directory">
+<meta name="twitter:description" content="Search 773 rugby clubs across England, Scotland, Wales and Northern Ireland. Every club has its own profile page.">
+<meta name="twitter:image" content="https://ukrugbyclubdirectory.co.uk/og-image.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://ukrugbyclubdirectory.co.uk/#website","url":"https://ukrugbyclubdirectory.co.uk/","name":"UK Rugby Club Directory","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://ukrugbyclubdirectory.co.uk/#search/{search_term_string}"},"query-input":"required name=search_term_string"}},{"@type":"Organization","name":"UK Rugby Club Directory","url":"https://ukrugbyclubdirectory.co.uk/"}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- COOKIE -->
+<div id="cb"><p>&#x1F36A; We use cookies to give you the best experience. <a href="#cookie-policy">Cookie Policy</a></p><div id="cb-btns"><button onclick="setCk('rej')">Reject</button><button onclick="setCk('acc')">Accept All</button></div></div>
+<button id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">&#x25B2;</button>
+
+<!-- TOP BAR -->
+<div class="topbar"><div class="con tb-in"><span>&#x1F3F4; England &nbsp;&middot;&nbsp; &#x1F3F4; Wales &nbsp;&middot;&nbsp; &#x1F3F4; Scotland &nbsp;&middot;&nbsp; Northern Ireland</span><div class="tb-r"><a onclick="go('register')">Register Club</a><span style="color:var(--navy4)">|</span><a onclick="go('contact')">Contact</a></div></div></div>
+
+<!-- HEADER -->
+<header id="hdr">
+<div class="con hdr-in">
+  <div class="logo" onclick="go('home')" aria-label="UK Rugby Club Directory">
+    <div class="lmk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/><line x1="12" y1="7" x2="12" y2="17"/><line x1="7.5" y1="9.5" x2="16.5" y2="14.5"/></svg></div>
+    <div><strong>UK Rugby</strong><span>Club Directory</span></div>
+  </div>
+  <nav id="mainnav" aria-label="Main navigation">
+    <span class="nl act" id="nl-home" onclick="go('home')">Home</span>
+    <div class="ni">
+      <span class="nl" onclick="go('rugby-union')">Rugby Union &#x25BE;</span>
+      <div class="ndd">
+        <a onclick="go('rugby-union')">All Union Clubs</a>
+        <a onclick="go('region/london')">London &amp; SE</a>
+        <a onclick="go('region/north-west')">North West</a>
+        <a onclick="go('region/yorkshire')">Yorkshire</a>
+        <a onclick="go('region/midlands')">Midlands</a>
+        <a onclick="go('region/south-west')">South West</a>
+        <a onclick="go('region/north-east')">North East</a>
+        <a onclick="go('region/wales')">Wales</a>
+        <a onclick="go('region/scotland')">Scotland</a>
+        <a onclick="go('region/northern-ireland')">N. Ireland</a>
+      </div>
+    </div>
+    <div class="ni">
+      <span class="nl" onclick="go('rugby-league')">Rugby League &#x25BE;</span>
+      <div class="ndd">
+        <a onclick="go('rugby-league')">All League Clubs</a>
+        <a onclick="go('region/yorkshire')">Yorkshire</a>
+        <a onclick="go('region/north-west')">North West</a>
+      </div>
+    </div>
+    <span class="nl" onclick="go('businesses')">Businesses</span>
+    <span class="nl" onclick="go('contact')">Contact</span>
+    <span class="nl ncta" onclick="go('register')">+ Register Club</span>
+  </nav>
+  <button id="ham" onclick="openMob()" aria-label="Menu">&#9776;</button>
+</div>
+</header>
+
+<!-- MOBILE NAV -->
+<div id="mobnav" role="dialog" aria-label="Mobile navigation">
+  <div id="mobnav-hdr">
+    <div class="logo"><div class="lmk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/></svg></div><div><strong style="color:#fff">UK Rugby</strong><span>Club Directory</span></div></div>
+    <button onclick="closeMob()">&#x2715;</button>
+  </div>
+  <a onclick="go('home');closeMob()">&#x1F3E0; Home</a>
+  <a onclick="go('rugby-union');closeMob()">&#x1F3C9; Rugby Union</a>
+  <a class="sub" onclick="go('region/london');closeMob()">&#8212; London &amp; SE</a>
+  <a class="sub" onclick="go('region/north-west');closeMob()">&#8212; North West</a>
+  <a class="sub" onclick="go('region/yorkshire');closeMob()">&#8212; Yorkshire</a>
+  <a class="sub" onclick="go('region/midlands');closeMob()">&#8212; Midlands</a>
+  <a class="sub" onclick="go('region/wales');closeMob()">&#8212; Wales</a>
+  <a class="sub" onclick="go('region/scotland');closeMob()">&#8212; Scotland</a>
+  <div class="mob-div"></div>
+  <a onclick="go('rugby-league');closeMob()">&#x26A1; Rugby League</a>
+  <a onclick="go('businesses');closeMob()">&#x1F4BC; Businesses</a>
+  <a onclick="go('contact');closeMob()">&#x1F4EC; Contact</a>
+  <div id="mob-cta"><a onclick="go('register');closeMob()">+ Register Your Club Free</a></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════ -->
+<div id="pg-home" class="pg">
+  <section id="hero">
+    <div class="hsl hs1 active"></div><div class="hsl hs2"></div><div class="hsl hs3"></div>
+    <div class="con" style="height:100%"><div id="hero-body"><div id="hero-ct">
+      <div class="pill">&#x2B50; UK's #1 Rugby Club Directory</div>
+      <h1>Rugby Near Me &#x2013;<br><em>Find a Club Today</em></h1>
+      <p class="h-sub">Discover <strong id="h-total">773</strong> rugby clubs across England, Scotland, Wales and Northern Ireland. Every club has its own full profile page.</p>
+      <div id="sw"><div id="sb">
+        <div class="sic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input id="si" type="search" placeholder="Club name, town, county&#x2026;" autocomplete="off" aria-label="Search rugby clubs">
+        <select id="stype"><option value="">All Types</option><option value="union">Rugby Union</option><option value="league">Rugby League</option><option value="business">Business</option></select>
+        <button id="sg" onclick="doSearch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Find a Club</button>
+      </div><div id="ac" role="listbox"></div></div>
+      <div id="hstats">
+        <div class="hst"><strong id="h-union">728</strong><span>Union Clubs</span></div>
+        <div class="hst"><strong id="h-league">45</strong><span>League Clubs</span></div>
+        <div class="hst"><strong>4</strong><span>Nations</span></div>
+        <div class="hst"><strong>Free</strong><span>Profiles</span></div>
+      </div>
+    </div></div></div>
+    <div id="hdots"><button class="hd active" onclick="setSlide(0)"></button><button class="hd" onclick="setSlide(1)"></button><button class="hd" onclick="setSlide(2)"></button></div>
+  </section>
+
+  <div id="sbar"><div class="con"><div class="sg">
+    <div class="sc"><div class="s-ico">&#x1F465;</div><span class="sn" id="sn-total">773</span><span class="sl">Clubs Listed</span></div>
+    <div class="sc"><div class="s-ico">&#x1F5FA;</div><span class="sn">4</span><span class="sl">UK Nations</span></div>
+    <div class="sc"><div class="s-ico">&#x1F4CD;</div><span class="sn">773</span><span class="sl">Profile Pages</span></div>
+    <div class="sc"><div class="s-ico">&#x2705;</div><span class="sn">Free</span><span class="sl">To Register</span></div>
+  </div></div></div>
+
+  <section class="sec bg-off">
+    <div class="con"><div class="sh"><div class="ey">Browse the Directory</div><h2>Find Rugby Near Me</h2><p class="sd">Every club has its own profile page with full contact details, location map and unique SEO.</p></div>
+    <div class="catgrid">
+      <div class="cat-c" onclick="go('rugby-union')"><div class="cat-bg cbg-u"></div><div class="cat-body"><div class="cat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/><line x1="12" y1="7" x2="12" y2="17"/></svg></div><h3>Rugby Union</h3><p>15-a-side rugby from Premiership to grassroots. Find clubs near you with full profiles.</p><div class="cat-lnk">Browse <span id="cat-u-cnt">728</span> clubs &#x2192;</div></div></div>
+      <div class="cat-c" onclick="go('rugby-league')"><div class="cat-bg cbg-l"></div><div class="cat-body"><div class="cat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><h3>Rugby League</h3><p>Super League, Championship and community clubs. Individual profiles for every club.</p><div class="cat-lnk">Browse <span id="cat-l-cnt">45</span> clubs &#x2192;</div></div></div>
+      <div class="cat-c" onclick="go('businesses')"><div class="cat-bg cbg-b"></div><div class="cat-body"><div class="cat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></div><h3>Rugby Businesses</h3><p>Equipment suppliers, kit makers, coaching and governing bodies across the UK.</p><div class="cat-lnk">Browse businesses &#x2192;</div></div></div>
+    </div></div>
+  </section>
+
+  <section class="sec">
+    <div class="con"><div class="sh"><div class="ey">Interactive Map</div><h2>Browse by Region</h2><p class="sd">Click any region on the map or tile to discover local rugby clubs near you.</p></div>
+    <div class="map-lay">
+      <div id="mapw"><div id="mtt"></div>
+        <svg id="ukmap" viewBox="0 0 380 620" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive UK map">
+          <path class="mr" id="mr-scotland" data-r="scotland" data-n="Scotland" d="M95,15L175,10L220,28L238,55L230,88L208,112L188,138L168,148L148,140L125,112L100,88L92,58L102,38Z"/>
+          <text class="ml" x="163" y="76">SCOTLAND</text>
+          <path class="mr" id="mr-north-east" data-r="north-east" data-n="North East" d="M178,152L218,146L228,170L218,200L198,212L178,202L168,182Z"/>
+          <text class="ml" x="196" y="183">NE</text>
+          <path class="mr" id="mr-north-west" data-r="north-west" data-n="North West" d="M128,162L174,156L176,200L164,216L144,222L124,212L118,186Z"/>
+          <text class="ml" x="147" y="194">NW</text>
+          <path class="mr" id="mr-yorkshire" data-r="yorkshire" data-n="Yorkshire" d="M178,155L224,148L234,176L224,206L202,216L180,204Z"/>
+          <text class="ml" x="204" y="188">YORKS</text>
+          <path class="mr" id="mr-wales" data-r="wales" data-n="Wales" d="M96,278L140,270L162,286L166,322L150,354L124,364L98,348L84,322L88,294Z"/>
+          <text class="ml" x="124" y="318">WALES</text>
+          <path class="mr" id="mr-midlands" data-r="midlands" data-n="Midlands" d="M155,255L212,250L226,270L220,302L195,316L165,312L148,295L150,265Z"/>
+          <text class="ml" x="185" y="286">MIDLANDS</text>
+          <path class="mr" id="mr-east" data-r="east" data-n="East England" d="M216,250L268,244L282,268L276,304L256,320L224,316L214,296Z"/>
+          <text class="ml" x="248" y="285">EAST</text>
+          <path class="mr" id="mr-south-west" data-r="south-west" data-n="South West" d="M88,342L146,336L166,356L162,396L136,418L100,412L74,392L78,362Z"/>
+          <text class="ml" x="118" y="382">SW</text>
+          <path class="mr" id="mr-london" data-r="london" data-n="London &amp; SE" d="M212,338L268,330L288,352L283,388L256,402L214,396L200,372Z"/>
+          <text class="ml" x="245" y="368">LONDON</text>
+          <path class="mr" id="mr-south" data-r="england" data-n="South England" d="M156,398L212,392L256,400L252,432L222,448L180,442L155,422Z"/>
+          <text class="ml" x="204" y="424">SOUTH</text>
+          <rect class="mr" id="mr-ni" data-r="northern-ireland" data-n="N. Ireland" x="16" y="72" width="68" height="52" rx="6"/>
+          <text class="ml" x="50" y="100">N.IRELAND</text>
+          <rect x="14" y="70" width="72" height="56" rx="8" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+        <div class="mleg"><span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:var(--navy3);border-radius:50%;display:inline-block"></span>Region</span><span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:var(--red);border-radius:50%;display:inline-block"></span>Hover</span><span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:var(--gold);border-radius:50%;display:inline-block"></span>Selected</span></div>
+      </div>
+      <div class="rgtiles">
+        <div class="rt" onclick="go('region/north-west')" data-r="north-west"><span class="rt-i">&#x1F3D8;</span><h4>North West</h4><small>Lancs, Merseyside, Cheshire</small></div>
+        <div class="rt" onclick="go('region/yorkshire')" data-r="yorkshire"><span class="rt-i">&#x26A1;</span><h4>Yorkshire</h4><small>West, South &amp; North Yorks</small></div>
+        <div class="rt" onclick="go('region/london')" data-r="london"><span class="rt-i">&#x1F3D9;</span><h4>London &amp; SE</h4><small>Greater London, Surrey</small></div>
+        <div class="rt" onclick="go('region/midlands')" data-r="midlands"><span class="rt-i">&#x1F3DF;</span><h4>Midlands</h4><small>Birmingham, Leicester</small></div>
+        <div class="rt" onclick="go('region/south-west')" data-r="south-west"><span class="rt-i">&#x1F30A;</span><h4>South West</h4><small>Bristol, Devon, Cornwall</small></div>
+        <div class="rt" onclick="go('region/north-east')" data-r="north-east"><span class="rt-i">&#x2693;</span><h4>North East</h4><small>Tyne &amp; Wear, Durham</small></div>
+        <div class="rt" onclick="go('region/wales')" data-r="wales"><span class="rt-i">&#x1F3F4;</span><h4>Wales</h4><small>Cardiff, Swansea, Newport</small></div>
+        <div class="rt" onclick="go('region/scotland')" data-r="scotland"><span class="rt-i">&#x1F3F4;</span><h4>Scotland</h4><small>Edinburgh, Glasgow</small></div>
+        <div class="rt" onclick="go('region/northern-ireland')" data-r="northern-ireland"><span class="rt-i">&#x1F340;</span><h4>N. Ireland</h4><small>Belfast, Bangor</small></div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="sec bg-off">
+    <div class="con"><div class="sh"><div class="ey">Top Clubs</div><h2>Featured Rugby Clubs</h2><p class="sd">Click any club card to view its full profile page with contact details, location and more.</p></div>
+    <div class="tab-bar"><button class="ttb active" onclick="swTab('union',this)">&#x1F3C9; Rugby Union</button><button class="ttb" onclick="swTab('league',this)">&#x26A1; Rugby League</button><button class="ttb" onclick="swTab('biz',this)">&#x1F4BC; Businesses</button></div>
+    <div id="tp-union" class="tp active"><div class="cg4" id="feat-u"></div></div>
+    <div id="tp-league" class="tp"><div class="cg4" id="feat-l"></div></div>
+    <div id="tp-biz" class="tp"><div class="cg4" id="feat-b"></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="con"><div class="sh"><div class="ey">Why Choose Us</div><h2>The UK's Leading Rugby Directory</h2><p class="sd">773 clubs, full individual profile pages, unique SEO, official badges and verified data.</p></div>
+    <div class="feat-g">
+      <div class="fc"><span class="f-ico">&#x1F4C4;</span><h3>Individual Club Pages</h3><p>Every one of 773 clubs has its own dedicated profile page with unique URL, title and meta description for full SEO coverage.</p></div>
+      <div class="fc"><span class="f-ico">&#x1F50D;</span><h3>Smart Fuzzy Search</h3><p>Predictive search finds clubs by name, town, county or postcode with intelligent fuzzy matching and instant autocomplete.</p></div>
+      <div class="fc"><span class="f-ico">&#x1F5FA;</span><h3>Interactive UK Map</h3><p>Click any region on our SVG map with hover tooltips to instantly browse all rugby clubs in that area.</p></div>
+      <div class="fc"><span class="f-ico">&#x1F3C5;</span><h3>Official Club Badges</h3><p>405+ official Google-sourced club badges displayed on every card and profile page with graceful fallbacks.</p></div>
+      <div class="fc"><span class="f-ico">&#x1F4CD;</span><h3>Google Maps Links</h3><p>Every club profile links directly to Google Maps for directions, helping fans and players find clubs near them.</p></div>
+      <div class="fc"><span class="f-ico">&#x1F195;</span><h3>Free Registration</h3><p>Register your club for free and get your own profile page. Reach thousands of players searching rugby near me each month.</p></div>
+    </div></div>
+  </section>
+
+  <div class="cta-band">
+    <div class="con"><h2>Get Your Club Its Own Profile Page</h2><p>Join 773 clubs with individual profile pages on the UK's most comprehensive rugby directory.</p>
+    <button class="btn-wh" onclick="go('register')">&#x2B50; Register Your Club Free</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: RUGBY UNION
+══════════════════════════════════════════════ -->
+<div id="pg-rugby-union" class="pg">
+  <div class="ph"><div class="con">
+    <nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Rugby Union</span></nav>
+    <div class="ph-in"><div><div class="phb">&#x1F3C9; Rugby Union Directory</div><h1>UK Rugby Union Club Directory</h1><p>Find rugby union clubs across England, Scotland, Wales and Northern Ireland. Every club has a full profile page.</p></div>
+    <div class="phc"><strong id="u-ph-cnt">728</strong><small>Union Clubs</small></div></div>
+  </div></div>
+  <section class="sec"><div class="con"><div class="dir-lay">
+    <aside class="dsb">
+      <div class="ds-s"><div class="ds-t">Nation</div><div class="ds-b">
+        <button class="fb active" onclick="filt('union','','',this)">All Nations <span class="fc-n" id="uf-all">--</span></button>
+        <button class="fb" onclick="filt('union','England','',this)">&#x1F3F4; England <span class="fc-n" id="uf-eng">--</span></button>
+        <button class="fb" onclick="filt('union','Wales','',this)">&#x1F3F4; Wales <span class="fc-n" id="uf-wal">--</span></button>
+        <button class="fb" onclick="filt('union','Scotland','',this)">&#x1F3F4; Scotland <span class="fc-n" id="uf-sco">--</span></button>
+        <button class="fb" onclick="filt('union','Northern Ireland','',this)">N. Ireland <span class="fc-n" id="uf-ni">--</span></button>
+      </div></div>
+      <div class="ds-s"><div class="ds-t">English Region</div><div class="ds-b">
+        <button class="fb" onclick="filt('union','','north-west',this)">North West</button>
+        <button class="fb" onclick="filt('union','','yorkshire',this)">Yorkshire</button>
+        <button class="fb" onclick="filt('union','','london',this)">London &amp; SE</button>
+        <button class="fb" onclick="filt('union','','midlands',this)">Midlands</button>
+        <button class="fb" onclick="filt('union','','south-west',this)">South West</button>
+        <button class="fb" onclick="filt('union','','north-east',this)">North East</button>
+        <button class="fb" onclick="filt('union','','east',this)">East England</button>
+      </div></div>
+    </aside>
+    <div><div class="dir-top">
+      <div><h2>Rugby Union Clubs</h2><p>Showing <strong id="u-cnt">728</strong> clubs</p></div>
+      <div class="dsr"><span class="di">&#x1F50D;</span><input id="u-srch" type="text" placeholder="Search clubs&#x2026;" oninput="srchDir('union',this.value)" aria-label="Search union clubs"></div>
+    </div><div class="cg3" id="u-list"></div><div class="pag" id="u-pag"></div></div>
+  </div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: RUGBY LEAGUE
+══════════════════════════════════════════════ -->
+<div id="pg-rugby-league" class="pg">
+  <div class="ph"><div class="con">
+    <nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Rugby League</span></nav>
+    <div class="ph-in"><div><div class="phb">&#x26A1; Rugby League Directory</div><h1>UK Rugby League Club Directory</h1><p>Find Super League, Championship and community rugby league clubs. Each club has its own profile page.</p></div>
+    <div class="phc"><strong id="l-ph-cnt">45</strong><small>League Clubs</small></div></div>
+  </div></div>
+  <section class="sec"><div class="con"><div class="dir-lay">
+    <aside class="dsb">
+      <div class="ds-s"><div class="ds-t">Nation</div><div class="ds-b">
+        <button class="fb active" onclick="filt('league','','',this)">All Nations</button>
+        <button class="fb" onclick="filt('league','England','',this)">&#x1F3F4; England</button>
+        <button class="fb" onclick="filt('league','Wales','',this)">&#x1F3F4; Wales</button>
+      </div></div>
+      <div class="ds-s"><div class="ds-t">Region</div><div class="ds-b">
+        <button class="fb" onclick="filt('league','','yorkshire',this)">Yorkshire</button>
+        <button class="fb" onclick="filt('league','','north-west',this)">North West</button>
+      </div></div>
+    </aside>
+    <div><div class="dir-top">
+      <div><h2>Rugby League Clubs</h2><p>Showing <strong id="l-cnt">45</strong> clubs</p></div>
+      <div class="dsr"><span class="di">&#x1F50D;</span><input id="l-srch" type="text" placeholder="Search clubs&#x2026;" oninput="srchDir('league',this.value)" aria-label="Search league clubs"></div>
+    </div><div class="cg3" id="l-list"></div><div class="pag" id="l-pag"></div></div>
+  </div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: BUSINESSES
+══════════════════════════════════════════════ -->
+<div id="pg-businesses" class="pg">
+  <div class="ph"><div class="con">
+    <nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Businesses</span></nav>
+    <div class="ph-in"><div><div class="phb">&#x1F4BC; Business Directory</div><h1>UK Rugby Business Directory</h1><p>Equipment suppliers, kit manufacturers, coaching companies and governing bodies. Each business has its own profile.</p></div>
+    <div class="phc"><strong id="b-ph-cnt">--</strong><small>Businesses</small></div></div>
+  </div></div>
+  <section class="sec"><div class="con"><div class="cg3" id="b-list"></div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: REGION
+══════════════════════════════════════════════ -->
+<div id="pg-region" class="pg">
+  <div class="ph"><div class="con">
+    <nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span id="rgn-bc" style="color:var(--gold)">Region</span></nav>
+    <div class="ph-in"><div><h1 id="rgn-h1">Rugby Clubs</h1><p id="rgn-sub">Find local rugby clubs.</p></div>
+    <div class="phc"><strong id="rgn-cnt">--</strong><small>Clubs Found</small></div></div>
+  </div></div>
+  <section class="sec"><div class="con"><div class="cg3" id="rgn-list"></div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: SEARCH
+══════════════════════════════════════════════ -->
+<div id="pg-search" class="pg">
+  <div class="ph"><div class="con"><h1 id="sr-h1" style="margin-top:12px">Search Results</h1><p id="sr-sub" style="color:rgba(255,255,255,.8);margin-top:8px">Showing results</p></div></div>
+  <section class="sec"><div class="con"><div class="cg3" id="sr-list"></div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: CLUB PROFILE (dynamically rendered)
+══════════════════════════════════════════════ -->
+<div id="pg-club" class="pg"></div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: CONTACT
+══════════════════════════════════════════════ -->
+<div id="pg-contact" class="pg">
+  <div class="ph"><div class="con"><nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Contact</span></nav><h1 style="margin-top:14px">Contact Us</h1><p>Get in touch with the UK Rugby Club Directory team.</p></div></div>
+  <section class="sec"><div class="con"><div class="cg2">
+    <div>
+      <h2 class="form-h">Get in Touch</h2>
+      <div class="ci"><div class="ci-i">&#x2709;</div><div><h4>Email</h4><a href="mailto:info@ukrugbyclubdirectory.co.uk">info@ukrugbyclubdirectory.co.uk</a></div></div>
+      <div class="ci"><div class="ci-i">&#x1F4CD;</div><div><h4>Based In</h4><p>United Kingdom</p></div></div>
+      <div class="ci"><div class="ci-i">&#x23F1;</div><div><h4>Response Time</h4><p>Within 2 business days</p></div></div>
+      <div class="ci"><div class="ci-i">&#x1F3C9;</div><div><h4>Register a Club</h4><p><a onclick="go('register')" style="color:var(--red);cursor:pointer">Register free &#x2192;</a></p></div></div>
+    </div>
+    <div class="form-box"><h2 class="form-h">Send a Message</h2>
+      <div class="fg2"><div class="fg"><label>Full Name *</label><input type="text" placeholder="Your name"></div><div class="fg"><label>Email *</label><input type="email" placeholder="your@email.com"></div></div>
+      <div class="fg"><label>Subject</label><select><option>General Enquiry</option><option>Register My Club</option><option>Update Listing</option><option>Report Error</option></select></div>
+      <div class="fg"><label>Message *</label><textarea placeholder="How can we help?"></textarea></div>
+      <button class="btn-sub" onclick="alert('Thank you! We will be in touch within 2 business days.')">Send Message &#x2192;</button>
+    </div>
+  </div></div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: REGISTER
+══════════════════════════════════════════════ -->
+<div id="pg-register" class="pg">
+  <div class="ph"><div class="con"><nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Register</span></nav><h1 style="margin-top:14px">Register Your Rugby Club</h1><p>Get your own profile page on the UK's leading rugby directory. Free &#x2013; 2 minutes.</p></div></div>
+  <section class="sec"><div class="con">
+    <div class="steps-r">
+      <div class="stp" data-step="1"><span class="sti">&#x1F464;</span><h3>Complete Profile</h3><p>Fill in your club details, contact info, location and teams offered.</p></div>
+      <div class="stp" data-step="2"><span class="sti">&#x2705;</span><h3>We Verify</h3><p>Our team reviews and verifies your submission to ensure quality.</p></div>
+      <div class="stp" data-step="3"><span class="sti">&#x1F4C4;</span><h3>Your Profile Goes Live</h3><p>Your club gets its own SEO profile page, discoverable by local players.</p></div>
+    </div>
+    <div class="form-box" style="max-width:660px;margin:0 auto"><h2 class="form-h">Club Registration Form</h2>
+      <div class="fg2"><div class="fg"><label>Club Name *</label><input type="text" placeholder="e.g. Northampton RFC"></div><div class="fg"><label>Club Type *</label><select><option>Rugby Union</option><option>Rugby League</option><option>Business</option></select></div></div>
+      <div class="fg2"><div class="fg"><label>Town/City *</label><input type="text" placeholder="e.g. Northampton"></div><div class="fg"><label>County *</label><input type="text" placeholder="e.g. Northamptonshire"></div></div>
+      <div class="fg2"><div class="fg"><label>Postcode</label><input type="text" placeholder="e.g. NN5 5BG"></div><div class="fg"><label>Country *</label><select><option>England</option><option>Wales</option><option>Scotland</option><option>Northern Ireland</option></select></div></div>
+      <div class="fg"><label>Website</label><input type="url" placeholder="https://yourclub.co.uk"></div>
+      <div class="fg"><label>Contact Email *</label><input type="email" placeholder="secretary@yourclub.co.uk"></div>
+      <div class="fg"><label>Phone</label><input type="tel" placeholder="+44 1234 567890"></div>
+      <div class="fg"><label>Club Description *</label><textarea placeholder="Tell us about your club &#x2013; teams, age groups, facilities and what makes you special&#x2026;"></textarea></div>
+      <div class="fg"><label style="display:flex;align-items:flex-start;gap:9px;font-weight:400;cursor:pointer"><input type="checkbox" style="width:auto;margin-top:3px">I agree to the <a onclick="go('terms')" style="color:var(--red);cursor:pointer">Terms</a> and <a onclick="go('privacy')" style="color:var(--red);cursor:pointer">Privacy Policy</a></label></div>
+      <button class="btn-sub" onclick="alert('Thank you! We will review and create your profile page. You will hear from us shortly.')">Get My Profile Page Free &#x2192;</button>
+    </div>
+  </div></section>
+</div>
+
+<!-- LEGAL PAGES -->
+<div id="pg-privacy" class="pg"><div class="ph"><div class="con"><nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Privacy</span></nav><h1 style="margin-top:14px">Privacy Policy</h1></div></div><section class="sec"><div class="con"><div class="leg"><p class="upd">Last updated: January 2025</p><h2>1. Introduction</h2><p>UK Rugby Club Directory is committed to protecting your personal data. This policy applies to ukrugbyclubdirectory.co.uk.</p><h2>2. Data We Collect</h2><p>Name, email and phone when you contact us or register a club; club information via registration; anonymised usage data; technical data via cookies.</p><h2>3. How We Use Your Data</h2><p>To operate the directory, process registrations, respond to enquiries and improve the site. We do not sell your data to third parties.</p><h2>4. Cookies</h2><p>See our <a onclick="go('cookie-policy')" style="cursor:pointer">Cookie Policy</a>.</p><h2>5. Your Rights (UK GDPR)</h2><p>You have the right to access, correct or delete your personal data. Email <a href="mailto:privacy@ukrugbyclubdirectory.co.uk">privacy@ukrugbyclubdirectory.co.uk</a>.</p><h2>6. Contact</h2><p><a href="mailto:privacy@ukrugbyclubdirectory.co.uk">privacy@ukrugbyclubdirectory.co.uk</a></p></div></div></section></div>
+
+<div id="pg-terms" class="pg"><div class="ph"><div class="con"><nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Terms</span></nav><h1 style="margin-top:14px">Terms of Service</h1></div></div><section class="sec"><div class="con"><div class="leg"><p class="upd">Last updated: January 2025</p><h2>1. Acceptance</h2><p>By using this website you agree to these terms.</p><h2>2. Directory Use</h2><p>Free public resource. No scraping or commercial exploitation without permission.</p><h2>3. Club Listings</h2><p>Provided in good faith. Clubs are responsible for keeping information current.</p><h2>4. Intellectual Property</h2><p>Content is property of UK Rugby Club Directory or respective owners.</p><h2>5. Governing Law</h2><p>Laws of England and Wales.</p></div></div></section></div>
+
+<div id="pg-cookie-policy" class="pg"><div class="ph"><div class="con"><nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><span style="color:var(--gold)">Cookies</span></nav><h1 style="margin-top:14px">Cookie Policy</h1></div></div><section class="sec"><div class="con"><div class="leg"><p class="upd">Last updated: January 2025</p><h2>What Are Cookies?</h2><p>Small text files placed on your device to make websites work efficiently and provide useful information.</p><h2>Cookies We Use</h2><ul><li><strong>Essential:</strong> Required for site function.</li><li><strong>Analytics:</strong> Anonymised usage data.</li><li><strong>Preferences:</strong> Remember your settings.</li></ul><h2>Managing Cookies</h2><p>Control via browser settings. Disabling some may affect functionality.</p></div></div></section></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-t"><div class="con"><div class="ftg">
+    <div>
+      <div class="ft-logo"><div class="lmk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/></svg></div><div><strong style="font-family:var(--fd);font-size:1.1rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.6px;display:block;line-height:1.1">UK Rugby</strong><span style="font-size:.63rem;color:var(--grey);letter-spacing:1.8px;text-transform:uppercase">Club Directory</span></div></div>
+      <p class="ft-desc">The UK's most comprehensive rugby club directory. 773 clubs each with their own full profile page, unique SEO and verified contact details across all four nations.</p>
+      <div class="socials"><span class="soc">&#x1F426;</span><span class="soc">&#x1F4D8;</span><span class="soc">&#x1F4F7;</span><span class="soc">&#x25B6;</span></div>
+    </div>
+    <div><h4>Directory</h4><ul>
+      <li><a onclick="go('home')">&#x25BA; Home</a></li>
+      <li><a onclick="go('rugby-union')">&#x25BA; Rugby Union</a></li>
+      <li><a onclick="go('rugby-league')">&#x25BA; Rugby League</a></li>
+      <li><a onclick="go('businesses')">&#x25BA; Businesses</a></li>
+    </ul></div>
+    <div><h4>Get Involved</h4><ul>
+      <li><a onclick="go('register')">&#x25BA; Register Club</a></li>
+      <li><a onclick="go('contact')">&#x25BA; Contact Us</a></li>
+      <li><a href="https://www.englandrugby.com" target="_blank" rel="noopener">&#x25BA; England Rugby</a></li>
+      <li><a href="https://www.wru.wales" target="_blank" rel="noopener">&#x25BA; Welsh Rugby Union</a></li>
+      <li><a href="https://www.scottishrugby.org" target="_blank" rel="noopener">&#x25BA; Scottish Rugby</a></li>
+      <li><a href="https://www.rugby-league.com" target="_blank" rel="noopener">&#x25BA; Rugby League</a></li>
+    </ul></div>
+    <div><h4>Legal</h4><ul>
+      <li><a onclick="go('privacy')">&#x25BA; Privacy Policy</a></li>
+      <li><a onclick="go('terms')">&#x25BA; Terms of Service</a></li>
+      <li><a onclick="go('cookie-policy')">&#x25BA; Cookie Policy</a></li>
+    </ul></div>
+  </div></div></div>
+  <div class="con"><div class="ft-b ft-b-in">
+    <p>&#xA9; 2025 UK Rugby Club Directory. All rights reserved. 773 individual club profiles across England, Scotland, Wales and Northern Ireland.</p>
+    <div><a onclick="go('privacy')">Privacy</a><a onclick="go('terms')">Terms</a><a onclick="go('cookie-policy')">Cookies</a><a onclick="go('contact')">Contact</a></div>
+  </div></div>
+</footer>
+
+<script src="clubs_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
