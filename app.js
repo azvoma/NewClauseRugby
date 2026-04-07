@@ -164,7 +164,7 @@ function route() {
     );
   }
 
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo(0,0);
 }
 
 function showPg(id) {
@@ -176,14 +176,16 @@ function updateNavAct(id) {
   if (el) el.classList.add('act');
 }
 function go(path) {
-  // Set hash for instant client-side routing
-  location.hash = path;
-  // Also push ?p= to URL so Netlify edge function can read it for SEO
+  // Update ?p= param silently for SEO edge function (no page reload)
   const url = new URL(location.href);
   url.searchParams.set('p', path);
+  url.hash = path;
   history.replaceState(null, '', url.toString());
+  // Trigger route directly — avoids hashchange event delay
+  route();
 }
 
+// hashchange handles browser back/forward; go() calls route() directly
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 
@@ -259,280 +261,226 @@ function setMeta(title, desc, keywords, url, schema, opts) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  CLUB PROFILE PAGE
+//  CLUB PROFILE PAGE — Yell-style layout
+//  Left: logo + name, about, details list, nearby clubs
+//  Right sidebar: contact card, map, share, own this listing
 // ════════════════════════════════════════════════════════════════
 function renderClubPage(slug) {
   const c = slugMap[slug];
-  if (!c) { document.getElementById('pg-club').innerHTML = '<div class="con sec"><h2>Club not found</h2><p><a href="#home">← Back to home</a></p></div>'; return; }
+  if (!c) { document.getElementById('pg-club').innerHTML = '<div class="con sec"><h2 style="padding:40px 0">Club not found</h2><p><a onclick="go('home')" style="color:var(--red);cursor:pointer">← Back to home</a></p></div>'; return; }
 
-  const tl = c.type==='union'?'Rugby Union':c.type==='league'?'Rugby League':'Rugby Business';
-  const tc = c.type;
+  const tl     = c.type==='union'?'Rugby Union':c.type==='league'?'Rugby League':'Rugby Business';
+  const tc     = c.type;
   const nation = c.country;
-  const loc = [c.city, c.county, c.country].filter(Boolean).join(', ');
+  const loc    = [c.city, c.county].filter(Boolean).join(', ');
+  const fullLoc= [c.city, c.county, c.country].filter(Boolean).join(', ');
 
   // ── SEO ──
   const pageTitle = `${c.name} – ${tl} Club in ${c.city||c.county}, ${nation} | UK Rugby Club Directory`;
-  const pageDesc  = `${c.name} is a ${tl.toLowerCase()} club based in ${loc}. ${c.desc.slice(0,110).trimEnd()}. Find address, phone, email, directions and more.`;
-  const pageKw    = [
-    c.name,
-    `${c.name} rugby club`,
-    `${tl.toLowerCase()} club ${c.city}`,
-    `rugby ${c.city}`,
-    `rugby ${c.county}`,
-    `rugby near me ${c.city}`,
-    `${c.type} clubs ${nation}`,
-    `${c.type} clubs ${c.region}`,
-    c.city + ' rugby',
-    c.county + ' rugby clubs',
-    nation + ' rugby clubs',
-    'find a rugby club',
-    'rugby near me',
-    SITE_NAME
-  ].filter(Boolean).join(', ');
-  const pageUrl = `#club/${slug}`;
+  const pageDesc  = `${c.name} is a ${tl.toLowerCase()} club based in ${fullLoc}. ${c.desc.slice(0,110).trimEnd()}. Find address, phone, email, directions and more.`;
+  const pageKw    = [c.name,`${c.name} rugby club`,`${tl.toLowerCase()} club ${c.city}`,`rugby ${c.city}`,`rugby ${c.county}`,`rugby near me ${c.city}`,`${c.type} clubs ${nation}`,c.city+' rugby',c.county+' rugby clubs',nation+' rugby clubs','find a rugby club','rugby near me',SITE_NAME].filter(Boolean).join(', ');
+  const pageUrl   = `#club/${slug}`;
+  const schema = {"@context":"https://schema.org","@type":"SportsOrganization","name":c.name,"sport":"Rugby","description":c.desc,"address":{"@type":"PostalAddress","streetAddress":c.address||undefined,"addressLocality":c.city,"addressRegion":c.county,"addressCountry":"GB"},"url":c.website&&c.website.startsWith('http')?c.website:`https://ukrugbyclubdirectory.co.uk/${pageUrl}`,"telephone":c.phone||undefined,"email":c.email||undefined,"logo":c.logo||undefined,"aggregateRating":c.rating?{"@type":"AggregateRating","ratingValue":c.rating,"bestRating":"5","worstRating":"1","reviewCount":"10"}:undefined,"sameAs":c.website&&c.website.startsWith('http')?[c.website]:undefined,"geo":c.lat&&c.lng?{"@type":"GeoCoordinates","latitude":c.lat,"longitude":c.lng}:undefined};
+  const geoOpts = c.lat&&c.lng?{geoRegion:nation==='Scotland'?'GB-SCT':nation==='Wales'?'GB-WLS':nation==='Northern Ireland'?'GB-NIR':'GB-ENG',geoPlacename:fullLoc,geoPos:`${c.lat};${c.lng}`,icbm:`${c.lat}, ${c.lng}`,ogType:'place'}:{};
+  setMeta(pageTitle,pageDesc,pageKw,pageUrl,schema,geoOpts);
 
-  const schema = {
-    "@context":"https://schema.org",
-    "@type":"SportsOrganization",
-    "name":c.name,
-    "sport":"Rugby",
-    "description":c.desc,
-    "address":{"@type":"PostalAddress","streetAddress":c.address||undefined,"addressLocality":c.city,"addressRegion":c.county,"addressCountry":"GB"},
-    "url":c.website&&c.website.startsWith('http')?c.website:`https://ukrugbyclubdirectory.co.uk/${pageUrl}`,
-    "telephone":c.phone||undefined,
-    "email":c.email||undefined,
-    "logo":c.logo||undefined,
-    "aggregateRating":c.rating?{"@type":"AggregateRating","ratingValue":c.rating,"bestRating":"5","worstRating":"1","reviewCount":"10"}:undefined,
-    "sameAs":c.website&&c.website.startsWith('http')?[c.website]:undefined,
-    "geo":c.lat&&c.lng?{"@type":"GeoCoordinates","latitude":c.lat,"longitude":c.lng}:undefined
+  // ── Stars helper ──
+  const starsHtml = r => {
+    let h = '<span class="y-stars">';
+    for(let i=1;i<=5;i++) h += `<svg width="14" height="14" viewBox="0 0 24 24" fill="${i<=Math.round(r)?'#f5a623':'#ddd'}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    h += '</span>'; return h;
   };
 
-  const geoOpts = c.lat && c.lng ? {
-    geoRegion:   nation==='Scotland'?'GB-SCT':nation==='Wales'?'GB-WLS':nation==='Northern Ireland'?'GB-NIR':'GB-ENG',
-    geoPlacename: [c.city, c.county, nation].filter(Boolean).join(', '),
-    geoPos:  `${c.lat};${c.lng}`,
-    icbm:    `${c.lat}, ${c.lng}`,
-    ogType:  'place'
-  } : {};
-
-  setMeta(pageTitle, pageDesc, pageKw, pageUrl, schema, geoOpts);
-
-  // ── NEARBY CLUBS ──
-  const nearby = DB.filter(x => x.id !== c.id && (x.region===c.region||x.country===c.country) && x.type===c.type).slice(0,6);
-
-  // ── STARS ──
-  const stars = c.rating ? renderStars(parseFloat(c.rating)) : '';
-
-  // ── LOGO ──
+  // ── Logo ──
   const logoHtml = c.logo
-    ? `<div class="club-crest"><img src="${c.logo}" alt="${c.name} badge" onerror="this.parentNode.innerHTML='<div class=club-crest-ph>${ballSvg()}</div>'"></div>`
-    : `<div class="club-crest"><div class="club-crest-ph">${ballSvg()}</div></div>`;
+    ? `<img class="y-logo" src="${c.logo}" alt="${c.name} badge" onerror="this.style.display='none'">`
+    : `<div class="y-logo-ph">${ballSvg()}</div>`;
 
-  // ── MAP ──
-  const mapHtml = c.lat && c.lng
-    ? `<div class="map-box" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(c.name)}/@${c.lat},${c.lng},15z','_blank')">
-        <div class="map-ph-ico">🗺️</div>
-        <div class="map-ph-txt">${c.address||loc}</div>
-        <div class="map-ph-lnk">View on Google Maps →</div>
-       </div>`
-    : `<div class="map-box"><div class="map-ph-ico">📍</div><div class="map-ph-txt">Location not available</div></div>`;
+  // ── Type badge colour ──
+  const badgeClass = tc==='union'?'y-badge-union':tc==='league'?'y-badge-league':'y-badge-biz';
 
-  // ── NEARBY HTML ──
-  const nearbyHtml = nearby.length
-    ? `<div class="nearby-grid">${nearby.map(n=>`
-        <div class="nearby-card" onclick="go('club/${n.slug}')">
-          <div class="nc-logo">${n.logo?`<img src="${n.logo}" alt="${n.name}" loading="lazy" onerror="this.style.display='none'">`:'⚽'}</div>
-          <div><span class="nc-nm">${n.name}</span><span class="nc-loc">📍 ${n.city||n.county}</span></div>
-        </div>`).join('')}</div>`
-    : '<p style="color:var(--grey);font-size:.88rem">No nearby clubs found.</p>';
+  // ── Region label ──
+  const regionMap = {'north-west':'North West','yorkshire':'Yorkshire','london':'London & SE','midlands':'Midlands','south-west':'South West','north-east':'North East','east':'East England','wales':'Wales','scotland':'Scotland','northern-ireland':'N. Ireland'};
+  const regionLabel = regionMap[c.region]||c.country;
+  const dirUrl = c.lat&&c.lng?`https://www.google.com/maps/search/${encodeURIComponent(c.name)}/@${c.lat},${c.lng},15z`:`https://www.google.com/maps/search/${encodeURIComponent(c.address||c.name)}`;
+
+  // ── Nearby clubs ──
+  const nearby = DB.filter(x=>x.id!==c.id&&(x.region===c.region||x.country===c.country)&&x.type===c.type).slice(0,6);
 
   const html = `
-    <!-- CLUB HERO -->
-    <div class="club-hero">
-      <div class="con">
-        <nav class="bc" style="padding-top:4px">
+  <!-- YELL-STYLE PROFILE PAGE -->
+  <div style="background:#f5f5f5;min-height:100vh;padding-bottom:40px">
+
+    <!-- BREADCRUMB -->
+    <div style="background:#fff;border-bottom:1px solid #e4e9f0">
+      <div class="con" style="padding-top:10px;padding-bottom:10px">
+        <nav class="bc">
           <a onclick="go('home')">Home</a><span class="bc-sep">›</span>
-          <a onclick="go('rugby-${c.type==='business'?'businesses':c.type}')">
-            ${c.type==='union'?'Rugby Union':c.type==='league'?'Rugby League':'Businesses'}
-          </a><span class="bc-sep">›</span>
-          <a onclick="go('region/${c.region}')">${(()=>{const m={'north-west':'North West','yorkshire':'Yorkshire','london':'London & SE','midlands':'Midlands','south-west':'South West','north-east':'North East','east':'East England','wales':'Wales','scotland':'Scotland','northern-ireland':'N. Ireland','england':'England'};return m[c.region]||c.country;})()}</a>
-          <span class="bc-sep">›</span><span style="color:var(--gold)">${c.name}</span>
+          <a onclick="go('rugby-${tc==='business'?'businesses':tc}')">${tc==='union'?'Rugby Union':tc==='league'?'Rugby League':'Businesses'}</a><span class="bc-sep">›</span>
+          <a onclick="go('region/${c.region}')">${regionLabel}</a><span class="bc-sep">›</span>
+          <span style="color:var(--gd)">${c.name}</span>
         </nav>
-        <div class="club-hero-in">
-          ${logoHtml}
-          <div class="club-hero-info">
-            <div class="club-tags">
-              <span class="club-tag ${tc}">${tl}</span>
-              <span class="club-tag country">🏴 ${nation}</span>
-              ${c.rating?`<span class="club-tag rated">⭐ ${c.rating}/5</span>`:''}
-            </div>
-            <h1>${c.name}</h1>
-            <div class="club-meta">
-              ${c.city?`<span class="cm-item"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${loc}</span>`:''}
-              ${c.phone?`<span class="cm-item"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>${c.phone}</span>`:''}
-            </div>
-            <div class="club-actions">
-              ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="btn-red">🌐 Visit Website</a>`:''}
-              ${c.phone?`<a href="tel:${c.phone}" class="btn-out">📞 Call Club</a>`:''}
-              ${c.email?`<a href="mailto:${c.email}" class="btn-out">✉️ Email</a>`:''}
-              ${c.lat&&c.lng?`<a href="https://www.google.com/maps/search/${encodeURIComponent(c.name)}/@${c.lat},${c.lng},15z" target="_blank" rel="noopener" class="btn-out">📍 Directions</a>`:''}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="club-tab-bar">
-        <div class="con"><div class="ctabs">
-          <button class="ctab active" onclick="swClubTab('ctp-overview',this)">📋 Overview</button>
-          <button class="ctab" onclick="swClubTab('ctp-contact',this)">📞 Contact & Location</button>
-          <button class="ctab" onclick="swClubTab('ctp-nearby',this)">🏟️ Nearby Clubs</button>
-          <button class="ctab" onclick="swClubTab('ctp-share',this)">📤 Share</button>
-        </div></div>
       </div>
     </div>
 
-    <!-- TAB: OVERVIEW -->
-    <div id="ctp-overview" class="ctpanel active">
-      <div class="con">
-        <div class="cp-layout">
-          <div>
-            <div class="info-card">
-              <div class="ic-head">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                About ${c.name}
-              </div>
-              <div class="ic-body" style="padding:20px">
-                <p class="about-txt">${c.desc}</p>
-                ${c.website&&c.website.startsWith('http')?`<p style="margin-top:10px"><a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600">Visit official website →</a></p>`:''}
-              </div>
-            </div>
+    <!-- HEADER BAR -->
+    <div style="background:#fff;border-bottom:1px solid #e4e9f0;padding:22px 0">
+      <div class="con" style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <!-- Logo -->
+        <div class="y-logo-wrap">${logoHtml}</div>
+        <!-- Info -->
+        <div style="flex:1;min-width:0">
+          <span class="y-badge ${badgeClass}">${tl}</span>
+          <h1 class="y-title">${c.name}</h1>
+          ${c.rating?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">${starsHtml(parseFloat(c.rating))}<span style="font-size:.88rem;color:#333;font-weight:600">${c.rating}</span><span style="font-size:.82rem;color:#888">Google rating</span></div>`:''}
+          <div style="display:flex;align-items:center;gap:6px;font-size:.88rem;color:#555;margin-bottom:10px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${c.address||fullLoc}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="y-btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Visit Website</a>`:''}
+            ${c.phone?`<a href="tel:${c.phone}" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg> ${c.phone}</a>`:''}
+            <a href="${dirUrl}" target="_blank" rel="noopener" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Get Directions</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            ${c.rating?`
-            <div class="info-card">
-              <div class="ic-head">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                Google Rating
-              </div>
-              <div class="ic-body" style="padding:20px">
-                <div style="display:flex;align-items:center;gap:12px">
-                  <span class="rating-num">${c.rating}</span>
-                  <div>${renderStars(parseFloat(c.rating))}<span class="rating-lbl">Based on Google Reviews</span></div>
+    <!-- MAIN CONTENT -->
+    <div class="con" style="padding-top:24px">
+      <div class="y-layout">
+
+        <!-- LEFT COLUMN -->
+        <div class="y-main">
+
+          <!-- About -->
+          <div class="y-card">
+            <h2 class="y-card-title">About ${c.name}</h2>
+            <p style="font-size:.93rem;color:#444;line-height:1.8;margin-bottom:14px">${c.desc}</p>
+            ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600;font-size:.9rem">Visit official website →</a>`:''}
+          </div>
+
+          <!-- Club Details -->
+          <div class="y-card">
+            <h2 class="y-card-title">Club Details</h2>
+            <table class="y-table">
+              <tr><td class="y-td-lbl">Sport Type</td><td class="y-td-val">${tl}</td></tr>
+              <tr><td class="y-td-lbl">Nation</td><td class="y-td-val">${nation}</td></tr>
+              <tr><td class="y-td-lbl">Region</td><td class="y-td-val">${regionLabel}</td></tr>
+              ${c.city?`<tr><td class="y-td-lbl">City / Town</td><td class="y-td-val">${c.city}</td></tr>`:''}
+              ${c.county?`<tr><td class="y-td-lbl">County</td><td class="y-td-val">${c.county}</td></tr>`:''}
+              ${c.address?`<tr><td class="y-td-lbl">Address</td><td class="y-td-val">${c.address}</td></tr>`:''}
+              ${c.phone?`<tr><td class="y-td-lbl">Phone</td><td class="y-td-val"><a href="tel:${c.phone}" style="color:var(--red)">${c.phone}</a></td></tr>`:''}
+              ${c.email?`<tr><td class="y-td-lbl">Email</td><td class="y-td-val"><a href="mailto:${c.email}" style="color:var(--red)">${c.email}</a></td></tr>`:''}
+              ${c.website&&c.website.startsWith('http')?`<tr><td class="y-td-lbl">Website</td><td class="y-td-val"><a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red)">${c.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a></td></tr>`:''}
+              ${c.rating?`<tr><td class="y-td-lbl">Google Rating</td><td class="y-td-val">${starsHtml(parseFloat(c.rating))} ${c.rating}/5</td></tr>`:''}
+            </table>
+          </div>
+
+          <!-- Nearby Clubs -->
+          ${nearby.length?`
+          <div class="y-card">
+            <h2 class="y-card-title">More ${tl} Clubs Near ${c.city||c.county}</h2>
+            <div class="y-nearby">
+              ${nearby.map(n=>`
+              <div class="y-nearby-item" onclick="go('club/${n.slug}')" role="button" tabindex="0">
+                <div class="y-nearby-logo">
+                  ${n.logo?`<img src="${n.logo}" alt="${n.name}" loading="lazy" onerror="this.style.display='none'">`:`<div style="color:var(--grey)">${ballSvg()}</div>`}
                 </div>
-              </div>
+                <div style="flex:1;min-width:0">
+                  <div class="y-nearby-name">${n.name}</div>
+                  <div class="y-nearby-loc">${n.city||n.county}</div>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>`).join('')}
+            </div>
+          </div>`:''}
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="y-sidebar">
+
+          <!-- Contact Card -->
+          <div class="y-card">
+            <h3 class="y-sidebar-title">Contact ${c.name}</h3>
+            ${c.phone?`
+            <a href="tel:${c.phone}" class="y-contact-row">
+              <div class="y-contact-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+              <div><span style="display:block;font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Phone</span><span style="font-size:.9rem;color:var(--red);font-weight:600">${c.phone}</span></div>
+            </a>`:''}
+            ${c.email?`
+            <a href="mailto:${c.email}" class="y-contact-row">
+              <div class="y-contact-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div>
+              <div><span style="display:block;font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Email</span><span style="font-size:.9rem;color:var(--red);font-weight:600">${c.email}</span></div>
+            </a>`:''}
+            ${c.address?`
+            <div class="y-contact-row">
+              <div class="y-contact-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div><span style="display:block;font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Address</span><span style="font-size:.88rem;color:#333">${c.address}</span></div>
             </div>`:''}
+            <a href="${dirUrl}" target="_blank" rel="noopener" class="y-btn-primary" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;width:100%;text-align:center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              Get Directions
+            </a>
+            ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="y-btn-outline" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;width:100%;text-align:center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              Visit Website
+            </a>`:''}
+          </div>
 
-            <div class="info-card">
-              <div class="ic-head">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-                Club Details
-              </div>
-              <div class="ic-body">
-                <div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/><line x1="12" y1="7" x2="12" y2="17"/></svg></div>
-                  <div><span class="ic-lbl">Sport Type</span><span class="ic-val">${tl}</span></div>
-                </div>
-                <div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                  <div><span class="ic-lbl">Location</span><span class="ic-val">${loc}</span></div>
-                </div>
-                ${c.address?`<div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
-                  <div><span class="ic-lbl">Address</span><span class="ic-val">${c.address}</span></div>
-                </div>`:''}
-                ${c.phone?`<div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.4 3.12A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
-                  <div><span class="ic-lbl">Phone</span><span class="ic-val"><a href="tel:${c.phone}">${c.phone}</a></span></div>
-                </div>`:''}
-                ${c.email?`<div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div>
-                  <div><span class="ic-lbl">Email</span><span class="ic-val"><a href="mailto:${c.email}">${c.email}</a></span></div>
-                </div>`:''}
-                ${c.website&&c.website.startsWith('http')?`<div class="ic-row">
-                  <div class="ic-ico"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
-                  <div><span class="ic-lbl">Website</span><span class="ic-val"><a href="${c.website}" target="_blank" rel="noopener">${c.website.replace('https://','').replace('http://','').replace(/\/$/,'')}</a></span></div>
-                </div>`:''}
+          <!-- Map -->
+          <div class="y-card" style="padding:0;overflow:hidden">
+            <div class="y-map" onclick="window.open('${dirUrl}','_blank')" style="cursor:pointer">
+              <div style="text-align:center;padding:28px 16px">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px;display:block"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <p style="font-size:.85rem;color:#555;margin-bottom:4px">${c.address||fullLoc}</p>
+                <span style="font-size:.8rem;font-weight:600;color:var(--red)">View on Google Maps →</span>
               </div>
             </div>
           </div>
 
-          <div>
-            ${mapHtml}
-            <div style="margin-top:20px">
-              <div class="info-card">
-                <div class="ic-head">📍 Quick Info</div>
-                <div class="ic-body" style="padding:14px 18px">
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.84rem">
-                    <div><span style="color:var(--grey);display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Nation</span><strong>${nation}</strong></div>
-                    <div><span style="color:var(--grey);display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Type</span><strong>${tl}</strong></div>
-                    ${c.rating?`<div style="grid-column:1/-1"><span style="color:var(--grey);display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Rating</span><strong>⭐ ${c.rating} / 5 (Google)</strong></div>`:''}
-                  </div>
-                </div>
-              </div>
-              <div style="margin-top:12px">
-                <a onclick="go('register')" style="display:block;background:var(--off);border:2px dashed var(--gl);border-radius:var(--rl);padding:16px;text-align:center;cursor:pointer;transition:var(--t)" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--gl)'">
-                  <div style="font-size:1.3rem;margin-bottom:6px">🏉</div>
-                  <div style="font-family:var(--fd);font-size:.82rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px">Own this club?</div>
-                  <div style="font-size:.78rem;color:var(--grey);margin-top:3px">Update your listing for free</div>
-                </a>
+          <!-- Share -->
+          <div class="y-card">
+            <h3 class="y-sidebar-title">Share this listing</h3>
+            <div style="display:flex;gap:8px">
+              <button class="y-share-btn" style="background:#1da1f2" onclick="window.open('https://twitter.com/intent/tweet?text=Find ${encodeURIComponent(c.name)} on the UK Rugby Club Directory&url=https://ukrugbyclubdirectory.co.uk/%23club/${c.slug}','_blank')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+              </button>
+              <button class="y-share-btn" style="background:#1877f2" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://ukrugbyclubdirectory.co.uk/%23club/${c.slug}','_blank')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </button>
+              <button class="y-share-btn" style="background:#25d366" onclick="window.open('https://wa.me/?text=Find ${encodeURIComponent(c.name)} at https://ukrugbyclubdirectory.co.uk/%23club/${c.slug}','_blank')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              </button>
+              <button class="y-share-btn" style="background:#555" onclick="navigator.clipboard.writeText('https://ukrugbyclubdirectory.co.uk/#club/${c.slug}').then(()=>this.title='Copied!')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Own this listing -->
+          <div class="y-card" style="background:#fff9e6;border:1px solid #f0d060">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div>
+                <div style="font-size:.83rem;font-weight:700;color:#333;margin-bottom:4px">Own this club?</div>
+                <div style="font-size:.78rem;color:#666;margin-bottom:10px">Update your listing details, add photos and more — completely free.</div>
+                <a onclick="go('register')" class="y-btn-outline" style="font-size:.78rem;padding:6px 14px;cursor:pointer">Update Listing Free</a>
               </div>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
 
-    <!-- TAB: CONTACT -->
-    <div id="ctp-contact" class="ctpanel">
-      <div class="con">
-        <div class="cp-layout">
-          <div>
-            <div class="info-card">
-              <div class="ic-head"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>Contact ${c.name}</div>
-              <div class="ic-body">
-                ${c.phone?`<div class="ic-row"><div class="ic-ico">📞</div><div><span class="ic-lbl">Phone</span><span class="ic-val"><a href="tel:${c.phone}">${c.phone}</a></span></div></div>`:''}
-                ${c.email?`<div class="ic-row"><div class="ic-ico">✉️</div><div><span class="ic-lbl">Email</span><span class="ic-val"><a href="mailto:${c.email}">${c.email}</a></span></div></div>`:''}
-                ${c.website&&c.website.startsWith('http')?`<div class="ic-row"><div class="ic-ico">🌐</div><div><span class="ic-lbl">Website</span><span class="ic-val"><a href="${c.website}" target="_blank" rel="noopener">${c.website}</a></span></div></div>`:''}
-                ${c.address?`<div class="ic-row"><div class="ic-ico">📍</div><div><span class="ic-lbl">Address</span><span class="ic-val">${c.address}</span></div></div>`:''}
-              </div>
-            </div>
-          </div>
-          <div>${mapHtml}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB: NEARBY -->
-    <div id="ctp-nearby" class="ctpanel">
-      <div class="con">
-        <h2 style="font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:20px">Nearby Rugby Clubs</h2>
-        ${nearbyHtml}
-      </div>
-    </div>
-
-    <!-- TAB: SHARE -->
-    <div id="ctp-share" class="ctpanel">
-      <div class="con" style="max-width:600px">
-        <h2 style="font-family:var(--fd);font-size:1.5rem;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:16px">Share ${c.name}</h2>
-        <p style="font-size:.9rem;color:var(--grey);margin-bottom:20px">Help other rugby fans and players find this club by sharing the listing.</p>
-        <div class="share-row">
-          <button class="share-btn share-tw" onclick="window.open('https://twitter.com/intent/tweet?text=Find ${encodeURIComponent(c.name)} on the UK Rugby Club Directory&url=https://ukrugbyclubdirectory.co.uk/%23club/${c.slug}','_blank')">🐦 Twitter</button>
-          <button class="share-btn share-fb" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://ukrugbyclubdirectory.co.uk/%23club/${c.slug}','_blank')">📘 Facebook</button>
-          <button class="share-btn share-cp" onclick="navigator.clipboard.writeText('https://ukrugbyclubdirectory.co.uk/#club/${c.slug}').then(()=>this.textContent='✓ Copied!')">📋 Copy Link</button>
-        </div>
-        <div style="margin-top:24px;background:var(--off);border-radius:var(--rl);padding:16px;border:1px solid var(--gl)">
-          <p style="font-size:.8rem;color:var(--grey);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Direct Link</p>
-          <code style="font-size:.84rem;color:var(--navy);word-break:break-all">https://ukrugbyclubdirectory.co.uk/#club/${c.slug}</code>
-        </div>
-      </div>
-    </div>
-
-    <!-- RELATED CLUBS -->
-    <div class="sec bg-off">
-      <div class="con">
-        <div class="sh"><div class="ey">More Rugby</div><h2>More Clubs in ${c.country}</h2></div>
+      <!-- MORE CLUBS -->
+      <div class="y-card" style="margin-top:24px">
+        <h2 class="y-card-title">More ${tl} Clubs in ${nation}</h2>
         <div class="cg3">${DB.filter(x=>x.id!==c.id&&x.country===c.country&&x.type===c.type).slice(0,6).map(clubCard).join('')}</div>
       </div>
-    </div>`;
+    </div>
+  </div>`;
 
   document.getElementById('pg-club').innerHTML = html;
 }
