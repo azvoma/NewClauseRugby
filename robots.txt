@@ -1,5 +1,14 @@
 User-agent: *
 Allow: /
+Allow: /club/
+Allow: /region/
+Allow: /county/
+Allow: /rugby-union
+Allow: /rugby-league
+Allow: /businesses
+Allow: /about
+Allow: /register
+Allow: /contact
 Disallow: /netlify/
 
 Sitemap: https://ukrugbyclubdirectory.co.uk/sitemap.xml

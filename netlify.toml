@@ -60,6 +60,26 @@
   to     = "/?p=contact"
   status = 200
 
+[[redirects]]
+  from   = "/about"
+  to     = "/?p=about"
+  status = 200
+
+[[redirects]]
+  from   = "/privacy"
+  to     = "/?p=privacy"
+  status = 200
+
+[[redirects]]
+  from   = "/terms"
+  to     = "/?p=terms"
+  status = 200
+
+[[redirects]]
+  from   = "/cookie-policy"
+  to     = "/?p=cookie-policy"
+  status = 200
+
 # ── Cache headers ────────────────────────────────────────────────
 # Images: long cache (they don't change often)
 [[headers]]

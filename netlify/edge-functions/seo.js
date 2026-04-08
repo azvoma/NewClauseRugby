@@ -123,6 +123,21 @@ const STATIC_PAGES = {
     }
   },
 
+  '/?p=about': {
+    title:    'About UK Rugby Club Directory | Free Rugby Club Listings UK',
+    desc:     'The UK's most comprehensive free rugby club directory with 773+ club profiles across England, Scotland, Wales and Northern Ireland. Independent, free and unaffiliated with any governing body.',
+    keywords: 'about UK rugby club directory, rugby club directory UK, free rugby club listings, rugby directory editorial policy',
+    robots:   'index, follow',
+    ogType:   'website',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      url: `${SITE}/about`,
+      name: 'About UK Rugby Club Directory',
+      description: '773+ free rugby club profiles across the UK'
+    }
+  },
+
   '/?p=contact': {
     title:    'Contact UK Rugby Club Directory | Update a Listing | Get in Touch',
     desc:     'Contact the UK Rugby Club Directory team to update a club listing, register a new club or make a general enquiry. We respond within 2 business days. Email: info@ukrugbyclubdirectory.co.uk',
@@ -269,6 +284,10 @@ function clubSeo(slug, club) {
       addressRegion: county || undefined,
       addressCountry: 'GB'
     },
+    openingHoursSpecification: club.training ? [{
+      '@type': 'OpeningHoursSpecification',
+      description: club.training
+    }] : undefined,
     ...(lat && lng ? { geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng } } : {}),
     ...(club.rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: club.rating, bestRating: '5', worstRating: '1', reviewCount: '10' } } : {}),
     breadcrumb: {

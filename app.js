@@ -9,7 +9,7 @@
 // ── HARDCODED ELITE / FEATURED CLUBS ─────────────────────────────
 const ELITE = [
   {id:1,name:'Leicester Tigers',type:'union',country:'England',region:'midlands',city:'Leicester',county:'Leicestershire',desc:'One of England\'s most decorated rugby clubs with 10 Premiership titles. Founded in 1880, playing at Welford Road Stadium. A cornerstone of English rugby with legendary players and a remarkable trophy-laden history.',website:'https://www.leicestertigers.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/a/ac/Leicester_Tigers_logo.svg/150px-Leicester_Tigers_logo.svg.png',featured:true,rating:'4.6',phone:'+44 116 319 8888',email:'enquiries@tigers.co.uk',address:'Aylestone Rd, Leicester LE2 7TR',lat:'52.6186',lng:'-1.1341',slug:'leicester-tigers'},
-  {id:2,name:'Saracens',type:'union',country:'England',region:'london',city:'London',county:'Greater London',desc:'Multiple Premiership and European Champions Cup winners. Based at StoneX Stadium, Saracens are one of the most successful clubs in the history of English and European rugby union.',website:'https://www.saracens.com',logo:'https://upload.wikimedia.org/wikipedia/en/3/3f/Saracens_F.C._Logo.svg',featured:true,rating:'4.5',phone:'+44 208 455 8181',email:'',address:'StoneX Stadium, Greenlands Lane, London NW4 1RL',lat:'51.5865',lng:'-0.2326',slug:'saracens'},
+  {id:2,name:'Saracens',type:'union',country:'England',region:'london',city:'London',county:'Greater London',desc:'Multiple Premiership and European Champions Cup winners. Based at StoneX Stadium, Saracens are one of the most successful clubs in the history of English and European rugby union.',website:'https://www.saracens.com',logo:'https://upload.wikimedia.org/wikipedia/en/3/3f/Saracens_F.C._Logo.svg',featured:true,rating:'4.5',phone:'+44 208 455 8181',email:'',address:'StoneX Stadium, Greenlands Lane, London NW4 1RL',lat:'51.5865',lng:'-0.2326',slug:'saracens',founded:'1876',colours:'Black & Red',league:'Gallagher Premiership',teams:'Senior XV,Women,Colts (U18),Under 16,Under 14,Minis',training:'Tue & Thu evenings (Senior), Sat mornings (Juniors)',honours:'5× Premiership Champions, 3× European Champions Cup'},
   {id:3,name:'Harlequins',type:'union',country:'England',region:'london',city:'Twickenham',county:'Greater London',desc:'One of rugby\'s founding clubs based at The Stoop. Famous for distinctive quartered jerseys and free-flowing attacking rugby. Multiple Premiership title winners with a loyal London fanbase.',website:'https://www.quins.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/Harlequins_crest.svg/150px-Harlequins_crest.svg.png',featured:true,rating:'4.5',phone:'+44 208 410 6000',email:'',address:'The Stoop, Langhorn Drive, Twickenham TW2 7SX',lat:'51.4513',lng:'-0.3398',slug:'harlequins'},
   {id:4,name:'Northampton Saints',type:'union',country:'England',region:'midlands',city:'Northampton',county:'Northamptonshire',desc:'Premiership club at Franklin\'s Gardens with passionate support and rich heritage in English rugby. Founded in 1880, the Saints have been Premiership champions and consistent European contenders.',website:'https://www.northamptonsaints.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Northampton_Saints_Logo.svg/150px-Northampton_Saints_Logo.svg.png',featured:true,rating:'4.4',phone:'+44 1604 751543',email:'',address:"Franklin's Gardens, Weedon Road, Northampton NN5 5BG",lat:'52.2443',lng:'-0.9126',slug:'northampton-saints'},
   {id:5,name:'Bath Rugby',type:'union',country:'England',region:'south-west',city:'Bath',county:'Somerset',desc:'Historic club at the Recreation Ground in the heart of Bath city centre. Multiple Premiership and European champions. One of England\'s most storied and successful rugby clubs.',website:'https://www.bathrugby.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Bath_Rugby_crest.svg/150px-Bath_Rugby_crest.svg.png',featured:true,rating:'4.4',phone:'+44 1225 325200',email:'',address:'Recreation Ground, Bath BA2 6PW',lat:'51.3808',lng:'-2.3601',slug:'bath-rugby'},
@@ -22,7 +22,7 @@ const ELITE = [
   {id:12,name:'Edinburgh Rugby',type:'union',country:'Scotland',region:'scotland',city:'Edinburgh',county:'Lothian',desc:'Professional rugby union club representing Edinburgh and the Scottish Borders. Play at Murrayfield Stadium with a rich history in the URC (United Rugby Championship).',website:'https://www.edinburghrugby.org',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Edinburgh_Rugby_logo.svg/150px-Edinburgh_Rugby_logo.svg.png',featured:true,rating:'4.3',phone:'+44 131 346 5000',email:'',address:'Scottish Gas Murrayfield Stadium, Edinburgh EH12 5PJ',lat:'55.9466',lng:'-3.2415',slug:'edinburgh-rugby'},
   {id:13,name:'Glasgow Warriors',type:'union',country:'Scotland',region:'scotland',city:'Glasgow',county:'Lanarkshire',desc:'Professional rugby club at Scotstoun Stadium. The Warriors are one of the most successful clubs in Pro14/URC history with passionate support across Glasgow and the West of Scotland.',website:'https://www.glasgowwarriors.org',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/5b/Glasgow_Warriors_logo.svg/150px-Glasgow_Warriors_logo.svg.png',featured:true,rating:'4.4',phone:'+44 141 959 5555',email:'',address:'Scotstoun Stadium, 72 Danes Dr, Glasgow G14 9HD',lat:'55.8751',lng:'-4.3501',slug:'glasgow-warriors'},
   // League
-  {id:50,name:'Leeds Rhinos',type:'league',country:'England',region:'yorkshire',city:'Leeds',county:'West Yorkshire',desc:'The most successful Super League club of the modern era. Eight Grand Final wins, multiple Challenge Cup victories, and home of legends Kevin Sinfield and Rob Burrow. Based at Headingley Stadium.',website:'https://www.leedsrhinos.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Leeds_Rhinos_badge.svg/150px-Leeds_Rhinos_badge.svg.png',featured:true,rating:'4.5',phone:'+44 113 278 6181',email:'',address:'Headingley Stadium, Leeds LS6 3BR',lat:'53.8194',lng:'-1.5797',slug:'leeds-rhinos'},
+  {id:50,name:'Leeds Rhinos',type:'league',country:'England',region:'yorkshire',city:'Leeds',county:'West Yorkshire',desc:'The most successful Super League club of the modern era. Eight Grand Final wins, multiple Challenge Cup victories, and home of legends Kevin Sinfield and Rob Burrow. Based at Headingley Stadium.',website:'https://www.leedsrhinos.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Leeds_Rhinos_badge.svg/150px-Leeds_Rhinos_badge.svg.png',featured:true,rating:'4.5',phone:'+44 113 278 6181',email:'',address:'Headingley Stadium, Leeds LS6 3BR',lat:'53.8194',lng:'-1.5797',slug:'leeds-rhinos',founded:'1890',colours:'Blue & Amber',league:'Betfred Super League',teams:'Senior XIII,Women,Under 19,Under 16,Under 14',honours:'8× Super League Champions, 3× World Club Champions, 8× Challenge Cup'},
   {id:51,name:'Wigan Warriors',type:'league',country:'England',region:'north-west',city:'Wigan',county:'Greater Manchester',desc:'The most decorated club in rugby league history. Record Challenge Cup wins and multiple championship titles spanning over a century of rugby league greatness at the DW Stadium.',website:'https://www.wiganwarriors.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/3/38/Wigan_Warriors_Badge_2019.svg/150px-Wigan_Warriors_Badge_2019.svg.png',featured:true,rating:'4.6',phone:'+44 1942 774000',email:'',address:'DW Stadium, Loire Drive, Wigan WN5 0UZ',lat:'53.5509',lng:'-2.6349',slug:'wigan-warriors'},
   {id:52,name:'St Helens RFC',type:'league',country:'England',region:'north-west',city:'St Helens',county:'Merseyside',desc:'Consecutive Super League champions and one of the most successful clubs in rugby league history. Playing at the Totally Wicked Stadium with a passionate and loyal fanbase.',website:'https://www.saintsrlfc.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/c/ca/St_Helens_RFC_badge.svg/150px-St_Helens_RFC_badge.svg.png',featured:true,rating:'4.6',phone:'+44 1744 455052',email:'',address:'Totally Wicked Stadium, St Helens WA9 3AL',lat:'53.4427',lng:'-2.7463',slug:'st-helens-rfc'},
   {id:53,name:'Warrington Wolves',type:'league',country:'England',region:'north-west',city:'Warrington',county:'Cheshire',desc:'Historic Super League club at the Halliwell Jones Stadium. Multiple Challenge Cup winners with an impressive squad and an ambitious vision for the future of Warrington rugby league.',website:'https://www.warringtonwolves.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Warrington_Wolves_badge.svg/150px-Warrington_Wolves_badge.svg.png',featured:true,rating:'4.4',phone:'+44 1925 248888',email:'',address:'Halliwell Jones Stadium, Warrington WA2 7NE',lat:'53.4045',lng:'-2.5551',slug:'warrington-wolves'},
@@ -58,7 +58,11 @@ if (typeof CSV_CLUBS !== 'undefined') {
       })(),
       website:r[8]||'', phone:r[9]||'', email:r[10]||'', logo:r[11]||'',
       lat:r[12]||'', lng:r[13]||'', rating:r[14]||'', slug:r[15]||'',
-      address:r[16]||'', training:r[17]||'', teams:r[18]||'', featured:false
+      address:r[16]||'', training:r[17]||'', teams:r[18]||'',
+      founded:r[19]||'', colours:r[20]||'', league:r[21]||'',
+      honours:r[22]||'', facilities:r[23]||'',
+      facebook:r[24]||'', twitter:r[25]||'', instagram:r[26]||'',
+      featured:false
     };
     DB.push(club);
     if (club.slug) slugMap[club.slug] = club;
@@ -89,6 +93,40 @@ console.log(`✓ Directory: ${DB.length} clubs | ${DB.filter(c=>c.logo).length} 
 //  go() sets the hash for instant client-side navigation AND
 //  pushes a ?p= history state so crawlers can read the URL.
 // ════════════════════════════════════════════════════════════════
+
+// ── Geolocation distance helper ─────────────────────────────────
+let userLat = null, userLng = null;
+function getUserLocation() {
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos => {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+    // Refresh any visible club cards to show distance
+    document.querySelectorAll('.cc-dist').forEach(el => {
+      const lat = parseFloat(el.dataset.lat);
+      const lng = parseFloat(el.dataset.lng);
+      if(!isNaN(lat) && !isNaN(lng)) {
+        el.textContent = haversine(userLat, userLng, lat, lng).toFixed(1) + ' mi';
+        el.style.display = 'flex';
+      }
+    });
+  }, ()=>{}, {timeout:5000});
+}
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 3958.8; // miles
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLon = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function distHtml(c) {
+  if(!c.lat||!c.lng) return '';
+  const dist = (userLat&&userLng) ? haversine(userLat,userLng,parseFloat(c.lat),parseFloat(c.lng)).toFixed(1)+' mi' : '';
+  const show = dist ? 'display:flex' : 'display:none';
+  return `<div class="cc-dist" data-lat="${c.lat}" data-lng="${c.lng}" style="${show};align-items:center;gap:3px;font-size:.72rem;color:var(--grey);margin-top:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${dist}</div>`;
+}
+// Trigger geolocation on page load
+window.addEventListener('load', () => { setTimeout(getUserLocation, 1000); });
 
 const COUNTIES = {
   'yorkshire':          {name:'Yorkshire',region:'yorkshire',country:'England'},
@@ -234,6 +272,9 @@ function route() {
       '#contact',
       {"@context":"https://schema.org","@type":"ContactPage","name":"Contact UK Rugby Club Directory","url":"https://ukrugbyclubdirectory.co.uk/#contact"}
     );
+  }
+  else if (page === 'about')           { showPg('pg-about');
+    setMeta('About UK Rugby Club Directory | Free Rugby Club Listings UK','The UK\'s most comprehensive free rugby club directory. 773+ club profiles across England, Scotland, Wales and Northern Ireland. Independent, free and unaffiliated.','about UK rugby club directory, rugby club directory UK, free rugby club listings','about',{"@context":"https://schema.org","@type":"AboutPage","name":"About UK Rugby Club Directory","url":"https://ukrugbyclubdirectory.co.uk/about"});
   }
   else if (page === 'register')       { showPg('pg-register');
     setMeta(
@@ -473,6 +514,7 @@ function renderClubPage(slug) {
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="y-btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Visit Website</a>`:''}
             ${c.phone?`<a href="tel:${c.phone}" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg> ${c.phone}</a>`:''}
+            ${c.phone?`<a href="https://wa.me/${c.phone.replace(/[^0-9]/g,'')}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:7px;font-size:.85rem;font-weight:600;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> WhatsApp</a>`:''}
             <a href="${dirUrl}" target="_blank" rel="noopener" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Get Directions</a>
           </div>
         </div>
@@ -486,14 +528,154 @@ function renderClubPage(slug) {
         <!-- LEFT COLUMN -->
         <div class="y-main">
 
-          <!-- About -->
+          <!-- ── ABOUT ─────────────────────────────────── -->
           <div class="y-card">
             <h2 class="y-card-title">About ${c.name}</h2>
             <p style="font-size:.93rem;color:#444;line-height:1.8;margin-bottom:14px">${c.desc}</p>
+            ${(()=>{
+              // Team tags section
+              const tags=(c.teams||'').split(',').map(t=>t.trim()).filter(Boolean);
+              if(!tags.length) return '';
+              const tagHtml=tags.map(t=>`<span class="team-tag">${t}</span>`).join('');
+              return `<div style="margin-bottom:14px"><div style="font-size:.72rem;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Teams Available</div><div class="cc-teams">${tagHtml}</div></div>`;
+            })()}
             ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600;font-size:.9rem">Visit official website →</a>`:''}
           </div>
 
-          <!-- Club Details -->
+          <!-- ── HIGH IMPACT: TRAINING SCHEDULE ───────── -->
+          <div class="y-card">
+            <h2 class="y-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Training & Match Days
+            </h2>
+            ${c.training ? `
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+              ${c.training.split(',').map(s=>s.trim()).filter(Boolean).map(s=>`
+              <div style="background:var(--off);border-radius:9px;padding:12px 14px;border:1px solid var(--gl)">
+                <div style="font-size:.72rem;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Session</div>
+                <div style="font-size:.88rem;font-weight:600;color:var(--navy)">${s}</div>
+              </div>`).join('')}
+            </div>` : `
+            <div style="background:var(--off);border-radius:9px;padding:14px 16px;border:1px dashed var(--gl);text-align:center">
+              <div style="font-size:.83rem;color:var(--grey);margin-bottom:6px">Training times not yet listed</div>
+              <a onclick="go('register')" style="font-size:.78rem;color:var(--red);font-weight:600;cursor:pointer">Are you the club secretary? Add training times free →</a>
+            </div>`}
+            <div style="background:#e8f4e8;border-radius:9px;padding:11px 14px;border:1px solid #c3e6cb;display:flex;align-items:center;gap:9px;margin-top:${c.training?'0':'10px'}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
+              <div style="font-size:.78rem;color:#166534;font-weight:600">Most clubs welcome new players — contact the club before your first visit</div>
+            </div>
+          </div>
+
+          <!-- ── HIGH IMPACT: TEAMS & AGE GROUPS ──────── -->
+          <div class="y-card">
+            <h2 class="y-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              Teams & Age Groups
+            </h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+              ${(()=>{
+                const allTeams = c.teams ? c.teams.split(',').map(t=>t.trim()).filter(Boolean) :
+                  c.type==='union' ? ['Senior XV','Junior Section','Mini Rugby','Colts (U18)'] :
+                  c.type==='league' ? ['Senior XIII','Junior Section'] : ['Senior Team'];
+                const icons = {
+                  'Mini':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>',
+                  'Junior':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+                  'Senior':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/></svg>',
+                  'Women':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M8 18h8"/></svg>',
+                  'Vets':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
+                };
+                return allTeams.map(t=>{
+                  const key = Object.keys(icons).find(k=>t.toLowerCase().includes(k.toLowerCase()))||'Senior';
+                  return `<div style="background:var(--off);border-radius:8px;padding:10px 12px;border:1px solid var(--gl);display:flex;align-items:center;gap:8px">
+                    ${icons[key]||icons.Senior}
+                    <span style="font-size:.82rem;font-weight:600;color:var(--navy)">${t}</span>
+                  </div>`;
+                }).join('');
+              })()}
+            </div>
+            <div style="background:#fef3c7;border-radius:8px;padding:10px 13px;border:1px solid #fde68a;font-size:.78rem;color:#92400e">
+              <strong>New to rugby?</strong> ${c.name} welcomes players of all experience levels. Contact the club to arrange a free trial session.
+            </div>
+          </div>
+
+          <!-- ── MEDIUM IMPACT: HONOURS & HISTORY ─────── -->
+          <div class="y-card">
+            <h2 class="y-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              History & Honours
+            </h2>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
+                <div style="font-size:1.4rem;font-weight:700;color:var(--navy);line-height:1">${c.founded||'—'}</div>
+                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Founded</div>
+              </div>
+              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
+                <div style="font-size:.82rem;font-weight:700;color:var(--navy);line-height:1.3">${c.colours||'—'}</div>
+                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Club Colours</div>
+              </div>
+              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
+                <div style="font-size:.82rem;font-weight:700;color:var(--navy);line-height:1.3">${c.league||tl}</div>
+                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Plays in</div>
+              </div>
+            </div>
+            ${c.honours?`<div style="font-size:.84rem;color:var(--gd);line-height:1.7"><strong style="color:var(--navy)">Honours:</strong> ${c.honours}</div>`:''}
+          </div>
+
+          <!-- ── MEDIUM IMPACT: MEMBERSHIP & HOW TO JOIN ─ -->
+          <div class="y-card" style="border:2px solid var(--red)">
+            <h2 class="y-card-title" style="color:var(--red)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+              How to Join ${c.name}
+            </h2>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:.75rem;font-weight:700">1</div>
+                <div><div style="font-size:.84rem;font-weight:600;color:var(--navy)">Get in touch</div><div style="font-size:.78rem;color:var(--grey);margin-top:2px">${c.phone?`Call ${c.phone} or`:''} ${c.email?`email ${c.email} to`:'Contact the club to'} express your interest</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:.75rem;font-weight:700">2</div>
+                <div><div style="font-size:.84rem;font-weight:600;color:var(--navy)">Come for a trial</div><div style="font-size:.78rem;color:var(--grey);margin-top:2px">Most clubs offer a free trial session — just turn up to a training session</div></div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="width:26px;height:26px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:.75rem;font-weight:700">3</div>
+                <div><div style="font-size:.84rem;font-weight:600;color:var(--navy)">Register & join</div><div style="font-size:.78rem;color:var(--grey);margin-top:2px">Complete your RFU/WRU registration and pay your club membership fee</div></div>
+              </div>
+            </div>
+            ${c.phone?`<a href="tel:${c.phone}" class="y-btn-primary" style="width:100%;justify-content:center;margin-bottom:8px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+              Call to Enquire
+            </a>`:''}
+            ${c.email?`<a href="mailto:${c.email}?subject=New member enquiry — ${encodeURIComponent(c.name)}" class="y-btn-outline" style="width:100%;justify-content:center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+              Email New Member Enquiry
+            </a>`:''}
+          </div>
+
+          <!-- ── MEDIUM IMPACT: FACILITIES ─────────────── -->
+          <div class="y-card">
+            <h2 class="y-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              Ground & Facilities
+            </h2>
+            ${c.facilities?`<p style="font-size:.87rem;color:var(--gd);line-height:1.7;margin-bottom:12px">${c.facilities}</p>`:
+            `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+              ${['Changing Rooms','Clubhouse / Bar','Parking','Match Pitch'].map(f=>`
+              <div style="display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--grey)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gl)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                ${f} — not listed
+              </div>`).join('')}
+            </div>
+            <a onclick="go('register')" style="font-size:.78rem;color:var(--red);font-weight:600;cursor:pointer">Own this club? Add facilities info →</a>`}
+            <div class="y-map" onclick="window.open('${dirUrl}','_blank')" style="cursor:pointer;border-radius:8px;margin-top:12px">
+              <div style="text-align:center;padding:22px 16px">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 7px"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <p style="font-size:.82rem;color:#555;margin-bottom:3px">${c.address||fullLoc}</p>
+                <span style="font-size:.78rem;font-weight:600;color:var(--red)">View on Google Maps →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Club Details table -->
           <div class="y-card">
             <h2 class="y-card-title">Club Details</h2>
             <table class="y-table">
@@ -506,11 +688,37 @@ function renderClubPage(slug) {
               ${c.phone?`<tr><td class="y-td-lbl">Phone</td><td class="y-td-val"><a href="tel:${c.phone}" style="color:var(--red)">${c.phone}</a></td></tr>`:''}
               ${c.email?`<tr><td class="y-td-lbl">Email</td><td class="y-td-val"><a href="mailto:${c.email}" style="color:var(--red)">${c.email}</a></td></tr>`:''}
               ${c.website&&c.website.startsWith('http')?`<tr><td class="y-td-lbl">Website</td><td class="y-td-val"><a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red)">${c.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a></td></tr>`:''}
-              ${c.training?`<tr><td class="y-td-lbl">Training</td><td class="y-td-val" style="font-weight:600;color:var(--navy)">${c.training}</td></tr>`:''}
-              ${c.teams?`<tr><td class="y-td-lbl">Teams</td><td class="y-td-val">${c.teams.split(',').map(t=>`<span style="display:inline-block;background:var(--off);border:1px solid var(--gl);border-radius:5px;padding:1px 7px;font-size:.75rem;margin:1px 2px">${t.trim()}</span>`).join('')}</td></tr>`:''}
               ${c.rating?`<tr><td class="y-td-lbl">Google Rating</td><td class="y-td-val">${starsHtml(parseFloat(c.rating))} ${c.rating}/5</td></tr>`:''}
             </table>
           </div>
+
+          <!-- ── QUICK WIN: MATCH RESULTS LINKS ─────────────────── -->
+          ${tc!=='business'?`
+          <div class="y-card">
+            <h2 class="y-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              Results & League Tables
+            </h2>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              ${nation==='England'&&tc==='union'?`<a href="https://www.englandrugby.com/clubs-and-volunteers/find-a-club" target="_blank" rel="noopener" class="y-contact-row" style="text-decoration:none">
+                <div class="y-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
+                <div><div style="font-size:.78rem;font-weight:600;color:var(--navy)">England Rugby — Club Finder & Results</div><div style="font-size:.72rem;color:var(--grey)">englandrugby.com</div></div>
+              </a>`:''}
+              ${nation==='Wales'&&tc==='union'?`<a href="https://www.wru.wales/clubs/" target="_blank" rel="noopener" class="y-contact-row" style="text-decoration:none">
+                <div class="y-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
+                <div><div style="font-size:.78rem;font-weight:600;color:var(--navy)">Welsh Rugby Union — Club Directory</div><div style="font-size:.72rem;color:var(--grey)">wru.wales</div></div>
+              </a>`:''}
+              ${nation==='Scotland'&&tc==='union'?`<a href="https://www.scottishrugby.org/club-rugby/" target="_blank" rel="noopener" class="y-contact-row" style="text-decoration:none">
+                <div class="y-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
+                <div><div style="font-size:.78rem;font-weight:600;color:var(--navy)">Scottish Rugby — Club Rugby</div><div style="font-size:.72rem;color:var(--grey)">scottishrugby.org</div></div>
+              </a>`:''}
+              ${tc==='league'?`<a href="https://www.rugby-league.com/results" target="_blank" rel="noopener" class="y-contact-row" style="text-decoration:none">
+                <div class="y-contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 00-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z"/></svg></div>
+                <div><div style="font-size:.78rem;font-weight:600;color:var(--navy)">Rugby League — Results & Tables</div><div style="font-size:.72rem;color:var(--grey)">rugby-league.com</div></div>
+              </a>`:''}
+              <div style="font-size:.75rem;color:var(--grey);padding:4px 0">Live results and league tables are managed by the relevant governing body. Visit the links above to find ${c.name} fixtures and results.</div>
+            </div>
+          </div>`:''}
 
           <!-- Nearby Clubs -->
           ${nearby.length?`
@@ -524,9 +732,10 @@ function renderClubPage(slug) {
                 </div>
                 <div style="flex:1;min-width:0">
                   <div class="y-nearby-name">${n.name}</div>
-                  <div class="y-nearby-loc">${n.city||n.county}</div>
+                  <div class="y-nearby-loc">${[n.city,n.county].filter(Boolean).join(', ')}</div>
                 </div>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                ${n.lat&&n.lng&&userLat?`<div style="font-size:.7rem;color:var(--grey);flex-shrink:0">${haversine(userLat,userLng,parseFloat(n.lat),parseFloat(n.lng)).toFixed(1)} mi</div>`:''}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </div>`).join('')}
             </div>
           </div>`:''}
@@ -558,11 +767,25 @@ function renderClubPage(slug) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
               Get Directions
             </a>
+            ${c.phone?`<a href="https://wa.me/${c.phone.replace(/[^0-9+]/g,'')}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;width:100%;padding:9px 18px;border-radius:7px;background:#25d366;color:#fff;font-size:.85rem;font-weight:600;text-decoration:none">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              WhatsApp the Club
+            </a>`:''}
             ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="y-btn-outline" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;width:100%;text-align:center">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
               Visit Website
             </a>`:''}
           </div>
+
+          <!-- Social Media Links — quick win ───────────── -->
+          ${(()=>{
+            const socials = [];
+            if(c.facebook) socials.push(`<a href="${c.facebook}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f0f2ff;border-radius:7px;font-size:.8rem;font-weight:600;color:#1877f2;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>Facebook Page</a>`);
+            if(c.twitter) socials.push(`<a href="${c.twitter}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f0f7ff;border-radius:7px;font-size:.8rem;font-weight:600;color:#1da1f2;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>Twitter / X</a>`);
+            if(c.instagram) socials.push(`<a href="${c.instagram}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fdf0f8;border-radius:7px;font-size:.8rem;font-weight:600;color:#c13584;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>Instagram</a>`);
+            if(!socials.length) return '';
+            return `<div class="y-card"><h3 class="y-sidebar-title">Follow on Social Media</h3><div style="display:flex;flex-direction:column;gap:7px">${socials.join('')}</div></div>`;
+          })()}
 
           <!-- Map -->
           <div class="y-card" style="padding:0;overflow:hidden">
@@ -699,8 +922,12 @@ srchIn.addEventListener('input', function() {
   const q=this.value.trim(), tf=document.getElementById('stype').value;
   if (q.length<2) { acBox.classList.remove('open'); return; }
   const res = DB.filter(c=>{
-    if(tf&&c.type!==tf) return false;
-    return fuzzy(c.name,q)||fuzzy(c.city,q)||fuzzy(c.county,q)||fuzzy(c.country,q);
+    if(tf==='beginner'){
+      // Show all union/league clubs — all welcome beginners
+      if(c.type==='business') return false;
+    } else if(tf&&c.type!==tf) return false;
+    if(q) return fuzzy(c.name,q)||fuzzy(c.city,q)||fuzzy(c.county,q)||fuzzy(c.country,q);
+    return true;
   }).slice(0,9);
   acBox.innerHTML = res.length
     ? res.map(c=>`
@@ -929,6 +1156,7 @@ function clubCard(c) {
       <span class="type-b ${tc}">${tl}</span>
       <div class="cc-nm">${c.name}</div>
       <div class="cc-loc"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${c.city}${c.county?', '+c.county:''}</div>
+      ${distHtml(c)}
       ${trainingHtml}
       <p class="cc-desc">${c.desc}</p>
       ${teamsHtml?`<div class="cc-teams">${teamsHtml}</div>`:''}
