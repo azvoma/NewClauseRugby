@@ -1,63 +1,55 @@
 // ════════════════════════════════════════════════════════════════
-//  UK Rugby Club Directory — Netlify Edge Function
-//  File: netlify/edge-functions/seo.js
+//  UK Rugby Club Directory — Netlify Edge Function v3
 //
-//  Intercepts every page request and injects fully unique,
-//  Yoast-style SEO into <head> BEFORE the browser receives it.
-//
-//  Every page gets its own:
-//    - <title>              (Focus Keyword first, like Yoast)
-//    - <meta name="description">
-//    - <meta name="keywords">
-//    - <meta name="robots">
-//    - <link rel="canonical">
-//    - <meta property="og:*">  (Open Graph for Facebook/LinkedIn)
-//    - <meta name="twitter:*"> (Twitter Card)
-//    - <script type="application/ld+json"> (Schema.org)
-//    - geo.* tags for location pages
-//
-//  URL structure (path-based, real URLs):
-//    /                       Homepage
-//    /rugby-union            Rugby Union directory
-//    /rugby-league           Rugby League directory
-//    /rugby-joints           Business directory
-//    /club/[slug]            Individual club profile
-//    /contact-us             Contact page
-//    /register               Register a club
-//    /privacy-policy         Privacy policy
-//    /terms-of-service       Terms
-//    /cookie-policy          Cookie policy
-//
-//  Club SEO uses the CLUB NAME as the primary focus keyword,
-//  exactly as Yoast recommends.
+//  FIXES:
+//  1. Homepage was stuck loading — caused by long cache-control
+//     on the edge function. Now no-store for homepage.
+//  2. Title pattern fixed to match EV Charger directory style:
+//     "Rugby Clubs in [City] | Find a Rugby Club Near Me"
+//     Focus keyword FIRST, brand last — pure Yoast approach.
+//  3. Every static page now has a truly unique title + desc +
+//     keywords — no shared templates.
+//  4. Club pages use club name as H1/focus keyword throughout.
+//  5. Canonical URLs now use ?p= param correctly.
+//  6. Removed duplicate meta tag injection bugs.
+//  7. Cache headers fixed — no caching on homepage/dynamic pages
+//     so changes appear instantly.
 // ════════════════════════════════════════════════════════════════
 
 import CLUBS_META from './clubs_meta.json' assert { type: 'json' };
 
 const SITE      = 'https://ukrugbyclubdirectory.co.uk';
-const SITE_NAME = 'The Rugby Club Directory';
-const OG_IMAGE  = `${SITE}/og-social-share.jpg`;
-const TWITTER   = '@RugbyClubDir';
+const SITE_NAME = 'UK Rugby Club Directory';
+const OG_IMAGE  = `${SITE}/RUGBY_BANNER.jpg`;
+const TWITTER   = '@UKRugbyClubs';
 
-// ── Yoast-style title builder ─────────────────────────────────
-// Pattern: [Focus Keyword] - [Secondary] | [Site Name]
-function yoastTitle(focus, secondary, siteName) {
-  siteName = siteName || SITE_NAME;
-  if (secondary) return `${focus} - ${secondary} | ${siteName}`;
-  return `${focus} | ${siteName}`;
-}
+// ── Region display names ──────────────────────────────────────
+const REGION_NAMES = {
+  'north-west':       'North West England',
+  'yorkshire':        'Yorkshire',
+  'london':           'London & South East',
+  'midlands':         'Midlands',
+  'south-west':       'South West England',
+  'north-east':       'North East England',
+  'wales':            'Wales',
+  'scotland':         'Scotland',
+  'northern-ireland': 'Northern Ireland',
+  'east':             'East England',
+};
 
-// ── Static page SEO definitions ──────────────────────────────
-// Modelled on what Yoast would produce: focus keyword leads title & desc
+// ════════════════════════════════════════════════════════════════
+//  STATIC PAGE SEO
+//  Pattern mirrors EV Charger site: keyword-rich title, desc
+//  includes keyword in first 20 words, unique per page
+// ════════════════════════════════════════════════════════════════
 const STATIC_PAGES = {
 
   '/': {
-    focusKw:   'Rugby Near Me',
-    title:     'Rugby Near Me - Find a Rugby Club Near You | The Rugby Club Directory',
-    desc:      'Rugby near me - find a rugby club in your area with the UK\'s most comprehensive rugby club directory. Search rugby clubs near me across England, Scotland, Wales and Northern Ireland. Find a rugby club today.',
-    keywords:  'rugby near me, find a rugby club, rugby clubs near me, rugby club near me, local rugby clubs, rugby union near me, rugby league near me, find rugby clubs, rugby teams near me, rugby club directory UK, grassroots rugby, junior rugby clubs, women\'s rugby near me',
-    robots:    'index, follow',
-    ogType:    'website',
+    title:    'Rugby Clubs Near Me | Find a Rugby Club | UK Rugby Club Directory',
+    desc:     'Find rugby clubs near me across the UK. Search 773+ rugby union and rugby league clubs in England, Scotland, Wales and Northern Ireland. Every club has a free profile with contact details and directions.',
+    keywords: 'rugby clubs near me, find a rugby club, rugby near me, rugby club directory UK, rugby union clubs, rugby league clubs, local rugby teams, grassroots rugby, junior rugby clubs, womens rugby, rugby club finder',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@graph': [
@@ -65,193 +57,159 @@ const STATIC_PAGES = {
           '@type': 'WebSite',
           '@id': `${SITE}/#website`,
           url: `${SITE}/`,
-          name: 'The Rugby Club Directory',
-          description: 'The UK\'s most comprehensive rugby club directory',
+          name: SITE_NAME,
+          description: 'The UK\'s most comprehensive rugby club directory with 773+ club profiles',
           potentialAction: {
             '@type': 'SearchAction',
-            target: { '@type': 'EntryPoint', urlTemplate: `${SITE}/search?q={search_term_string}` },
+            target: { '@type': 'EntryPoint', urlTemplate: `${SITE}/?p=search/{search_term_string}` },
             'query-input': 'required name=search_term_string'
           }
         },
         {
           '@type': 'Organization',
           '@id': `${SITE}/#organization`,
-          name: 'The Rugby Club Directory',
+          name: SITE_NAME,
           url: `${SITE}/`,
-          logo: { '@type': 'ImageObject', url: `${SITE}/logo.png` },
-          contactPoint: { '@type': 'ContactPoint', email: 'andrew@therugbyclubdirectory.co.uk', contactType: 'customer service' }
-        },
-        {
-          '@type': 'WebPage',
-          '@id': `${SITE}/#homepage`,
-          url: `${SITE}/`,
-          name: 'Rugby Near Me - Find a Rugby Club Near You',
-          description: 'The UK\'s most comprehensive rugby club directory connecting players with clubs across all four nations.',
-          isPartOf: { '@id': `${SITE}/#website` }
+          description: '773+ UK rugby club profiles across England, Scotland, Wales and Northern Ireland'
         }
       ]
     }
   },
 
-  '/rugby-union': {
-    focusKw:   'Rugby Union Clubs UK',
-    title:     'Rugby Union Clubs UK - Find London Rugby Teams & Local Clubs Near You | The Rugby Club Directory',
-    desc:      'Find rugby union clubs UK-wide including London rugby teams, Premiership clubs and grassroots union teams. Search rugby union clubs near me from elite to community level across England, Scotland, Wales and Northern Ireland.',
-    keywords:  'rugby union clubs UK, rugby union near me, London rugby teams, rugby union clubs near me, Premiership rugby clubs, grassroots rugby union, rugby union England, rugby union Wales, rugby union Scotland, find a rugby union club, amateur rugby union, women\'s rugby union, junior rugby union clubs',
-    robots:    'index, follow',
-    ogType:    'website',
+  '/?p=rugby-union': {
+    title:    'Rugby Union Clubs UK | 728 Clubs | Find a Club Near You | UK Rugby Club Directory',
+    desc:     'Search 728 rugby union clubs across England, Scotland, Wales and Northern Ireland. Find Premiership, Championship and grassroots union clubs near you with contact details, maps and directions.',
+    keywords: 'rugby union clubs UK, rugby union near me, rugby union clubs England, rugby union clubs Wales, rugby union clubs Scotland, find a rugby union club, grassroots rugby union, Premiership rugby clubs, amateur rugby union, junior rugby union',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      '@id': `${SITE}/rugby-union#collectionpage`,
-      url: `${SITE}/rugby-union`,
+      '@id': `${SITE}/?p=rugby-union`,
+      url: `${SITE}/?p=rugby-union`,
       name: 'Rugby Union Clubs UK Directory',
-      description: 'Complete directory of rugby union clubs across the UK including London rugby teams, Premiership clubs and grassroots community teams',
-      isPartOf: { '@id': `${SITE}/#website` },
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Rugby Union', item: `${SITE}/rugby-union` }
-        ]
-      }
+      description: '728 rugby union clubs across the UK'
     }
   },
 
-  '/rugby-league': {
-    focusKw:   'Rugby League Teams Near Me',
-    title:     'Rugby League Clubs UK - Find Teams Near You from Super League to Grassroots | The Rugby Club Directory',
-    desc:      'Find rugby league teams near me with our UK-wide directory. Search rugby league clubs near me from Super League champions to community grassroots teams. Discover rugby league teams UK-wide by location or club name.',
-    keywords:  'rugby league teams near me, rugby league clubs near me, Super League clubs, rugby league UK, rugby league teams UK, find rugby league clubs, rugby league near me, community rugby league, rugby league Yorkshire, rugby league Lancashire, rugby league Merseyside, Cumbria rugby league, women\'s rugby league',
-    robots:    'index, follow',
-    ogType:    'website',
+  '/?p=rugby-league': {
+    title:    'Rugby League Clubs UK | Super League to Grassroots | UK Rugby Club Directory',
+    desc:     'Find rugby league clubs across England and Wales. Browse Super League, Championship and community clubs near you. Every club has a full profile with contact details, location and directions.',
+    keywords: 'rugby league clubs UK, rugby league near me, Super League clubs, rugby league England, rugby league Yorkshire, rugby league Lancashire, rugby league Merseyside, find a rugby league club, community rugby league, Challenge Cup clubs',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      '@id': `${SITE}/rugby-league#collectionpage`,
-      url: `${SITE}/rugby-league`,
+      '@id': `${SITE}/?p=rugby-league`,
+      url: `${SITE}/?p=rugby-league`,
       name: 'Rugby League Clubs UK Directory',
-      description: 'Complete directory of rugby league clubs across the UK from Super League to community grassroots level',
-      isPartOf: { '@id': `${SITE}/#website` },
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Rugby League', item: `${SITE}/rugby-league` }
-        ]
-      }
+      description: 'Rugby league clubs from Super League to community grassroots level'
     }
   },
 
-  '/rugby-joints': {
-    focusKw:   'Rugby Businesses UK',
-    title:     'Rugby Businesses UK - Suppliers, Kit Manufacturers & Services | The Rugby Club Directory',
-    desc:      'Find rugby businesses UK-wide including kit suppliers, equipment manufacturers, coaching services and rugby governing bodies. Connect with businesses that support rugby clubs near me and the wider rugby community.',
-    keywords:  'rugby businesses UK, rugby equipment suppliers, rugby kit manufacturers, rugby coaching services, rugby suppliers, rugby governing bodies, RFU, WRU, SRU, rugby sports medicine, rugby media, rugby sponsorship, rugby trade directory UK',
-    robots:    'index, follow',
-    ogType:    'website',
+  '/?p=businesses': {
+    title:    'Rugby Businesses & Suppliers UK | Kit, Equipment & Services | UK Rugby Club Directory',
+    desc:     'Find rugby businesses across the UK including kit manufacturers, equipment suppliers, coaching companies and governing bodies. Connect with RFU, WRU, SRU and rugby trade partners.',
+    keywords: 'rugby businesses UK, rugby equipment suppliers, rugby kit manufacturers, rugby governing bodies, RFU, WRU, SRU, rugby coaching companies, rugby trade directory, rugby sports businesses',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      '@id': `${SITE}/rugby-joints#collectionpage`,
-      url: `${SITE}/rugby-joints`,
-      name: 'Rugby Businesses UK Directory',
-      description: 'Directory of rugby businesses, suppliers, kit manufacturers and services across the UK',
-      isPartOf: { '@id': `${SITE}/#website` },
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Rugby Joints', item: `${SITE}/rugby-joints` }
-        ]
-      }
+      '@id': `${SITE}/?p=businesses`,
+      url: `${SITE}/?p=businesses`,
+      name: 'Rugby Businesses UK Directory'
     }
   },
 
-  '/contact-us': {
-    focusKw:   'Contact The Rugby Club Directory',
-    title:     'Contact The Rugby Club Directory UK - Get In Touch With Our Team | The Rugby Club Directory',
-    desc:      'Contact The Rugby Club Directory UK team. Update your club listing, register a new club, report an error or make an enquiry. We respond to all messages within 24-48 hours. Email: andrew@therugbyclubdirectory.co.uk',
-    keywords:  'contact rugby club directory, rugby club listing update, register rugby club, rugby directory enquiry, The Rugby Club Directory contact, uk rugby directory support',
-    robots:    'index, follow',
-    ogType:    'website',
+  '/?p=contact': {
+    title:    'Contact UK Rugby Club Directory | Update a Listing | Get in Touch',
+    desc:     'Contact the UK Rugby Club Directory team to update a club listing, register a new club or make a general enquiry. We respond within 2 business days. Email: info@ukrugbyclubdirectory.co.uk',
+    keywords: 'contact rugby club directory, update rugby club listing, rugby directory enquiry',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
-      '@id': `${SITE}/contact-us#contactpage`,
-      url: `${SITE}/contact-us`,
-      name: 'Contact The Rugby Club Directory',
-      description: 'Get in touch with The Rugby Club Directory UK team',
-      isPartOf: { '@id': `${SITE}/#website` },
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Contact Us', item: `${SITE}/contact-us` }
-        ]
-      }
+      url: `${SITE}/?p=contact`,
+      name: 'Contact UK Rugby Club Directory'
     }
   },
 
-  '/register': {
-    focusKw:   'Register Your Rugby Club',
-    title:     'Register Your Rugby Club - Free Listing for UK Rugby Clubs | The Rugby Club Directory',
-    desc:      'Register your rugby club for free on The Rugby Club Directory UK. Get your own profile page, appear in rugby near me searches and connect with players in your area. Free registration for all UK rugby clubs.',
-    keywords:  'register rugby club, add rugby club to directory, free rugby club listing, rugby club profile, list my rugby club, rugby club registration UK, get found in rugby near me, rugby club directory listing',
-    robots:    'index, follow',
-    ogType:    'website',
+  '/?p=register': {
+    title:    'Register Your Rugby Club Free | Get a Profile Page | UK Rugby Club Directory',
+    desc:     'Register your rugby club for free on the UK Rugby Club Directory. Get your own SEO profile page, appear in rugby near me searches and connect with players in your area. Takes 2 minutes.',
+    keywords: 'register rugby club, add rugby club to directory, free rugby club listing, rugby club profile page, list my rugby club online',
+    robots:   'index, follow',
+    ogType:   'website',
     schema: {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      '@id': `${SITE}/register#webpage`,
-      url: `${SITE}/register`,
-      name: 'Register Your Rugby Club - Free Listing',
-      description: 'Free rugby club registration on The Rugby Club Directory UK',
-      isPartOf: { '@id': `${SITE}/#website` },
-      breadcrumb: {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Register', item: `${SITE}/register` }
-        ]
-      }
+      url: `${SITE}/?p=register`,
+      name: 'Register Your Rugby Club Free'
     }
   },
 
-  '/privacy-policy': {
-    focusKw:   'Privacy Policy',
-    title:     'Privacy Policy - The Rugby Club Directory UK | Data Protection & GDPR',
-    desc:      'Read The Rugby Club Directory UK privacy policy. We are committed to protecting your personal data in full compliance with UK GDPR and the Data Protection Act 2018.',
-    keywords:  'The Rugby Club Directory privacy policy, rugby directory data protection, GDPR rugby website, personal data rugby club directory',
-    robots:    'noindex, follow',
-    ogType:    'website',
-    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/privacy-policy`, name: 'Privacy Policy - The Rugby Club Directory' }
+  '/?p=privacy': {
+    title:    'Privacy Policy | UK Rugby Club Directory',
+    desc:     'Read the UK Rugby Club Directory privacy policy. We protect your personal data in compliance with UK GDPR and the Data Protection Act 2018.',
+    keywords: 'rugby club directory privacy policy, data protection, GDPR',
+    robots:   'noindex, follow',
+    ogType:   'website',
+    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/?p=privacy`, name: 'Privacy Policy' }
   },
 
-  '/terms-of-service': {
-    focusKw:   'Terms of Service',
-    title:     'Terms of Service - The Rugby Club Directory UK | Terms & Conditions',
-    desc:      'Read the terms of service for The Rugby Club Directory UK. These terms govern your use of therugbyclubdirectory.co.uk and our club listing directory services.',
-    keywords:  'The Rugby Club Directory terms of service, rugby directory terms and conditions, rugby club directory legal',
-    robots:    'noindex, follow',
-    ogType:    'website',
-    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/terms-of-service`, name: 'Terms of Service - The Rugby Club Directory' }
+  '/?p=terms': {
+    title:    'Terms of Service | UK Rugby Club Directory',
+    desc:     'Read the terms of service for UK Rugby Club Directory governing use of ukrugbyclubdirectory.co.uk and its club listing directory.',
+    keywords: 'rugby club directory terms of service, terms and conditions',
+    robots:   'noindex, follow',
+    ogType:   'website',
+    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/?p=terms`, name: 'Terms of Service' }
   },
 
-  '/cookie-policy': {
-    focusKw:   'Cookie Policy',
-    title:     'Cookie Policy - The Rugby Club Directory UK | How We Use Cookies',
-    desc:      'Read the cookie policy for The Rugby Club Directory UK. Learn how we use essential, analytics and preference cookies to improve your browsing experience.',
-    keywords:  'The Rugby Club Directory cookie policy, cookies rugby directory, how we use cookies rugby website',
-    robots:    'noindex, follow',
-    ogType:    'website',
-    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/cookie-policy`, name: 'Cookie Policy - The Rugby Club Directory' }
+  '/?p=cookie-policy': {
+    title:    'Cookie Policy | UK Rugby Club Directory',
+    desc:     'Read the cookie policy for UK Rugby Club Directory. Learn how we use essential, analytics and preference cookies.',
+    keywords: 'rugby club directory cookie policy',
+    robots:   'noindex, follow',
+    ogType:   'website',
+    schema: { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/?p=cookie-policy`, name: 'Cookie Policy' }
   }
 };
 
-// ── Club page SEO generator ───────────────────────────────────
-// Focus keyword = Club Name (Yoast primary keyword)
-// Title, desc, keywords all built around club name + location
+// ════════════════════════════════════════════════════════════════
+//  REGION PAGE SEO — generated dynamically
+// ════════════════════════════════════════════════════════════════
+function regionSeo(region) {
+  const name = REGION_NAMES[region] || region;
+  const geoReg = region === 'scotland' ? 'GB-SCT' : region === 'wales' ? 'GB-WLS' : region === 'northern-ireland' ? 'GB-NIR' : 'GB-ENG';
+  return {
+    title:    `Rugby Clubs in ${name} | Find a Club Near You | UK Rugby Club Directory`,
+    desc:     `Find rugby clubs in ${name}. Browse rugby union, rugby league and businesses across ${name} with contact details, addresses and Google Maps directions.`,
+    keywords: `rugby clubs ${name}, rugby ${name}, rugby union ${name}, rugby league ${name}, find a rugby club ${name}, rugby near me ${name}, grassroots rugby ${name}, junior rugby ${name}`,
+    robots:   'index, follow',
+    ogType:   'website',
+    geoRegion: geoReg,
+    geoPlace:  name,
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      url: `${SITE}/?p=region/${region}`,
+      name: `Rugby Clubs in ${name}`,
+      description: `Directory of rugby clubs in ${name}`
+    }
+  };
+}
+
+// ════════════════════════════════════════════════════════════════
+//  CLUB PAGE SEO
+//  Club Name is the focus keyword — Yoast primary keyword approach
+//  Title: [Club Name] | [Type] Club in [City] | UK Rugby Club Directory
+//  Desc:  [Club Name] is a [type] club in [city, county].
+//         [First 120 chars of desc]. Find contact details...
+// ════════════════════════════════════════════════════════════════
 function clubSeo(slug, club) {
   const name    = club.name;
   const type    = club.type === 'union'   ? 'Rugby Union'
@@ -260,60 +218,51 @@ function clubSeo(slug, club) {
   const city    = club.city    || '';
   const county  = club.county  || '';
   const country = club.country || 'England';
-  const region  = club.region  || '';
-  const desc    = (club.desc   || '').slice(0, 155).trimEnd();
-  const rating  = club.rating  || '';
+  const desc    = (club.desc   || '').slice(0, 140).trimEnd();
   const lat     = club.lat     || '';
   const lng     = club.lng     || '';
 
   const loc     = [city, county].filter(Boolean).join(', ');
   const fullLoc = [city, county, country].filter(Boolean).join(', ');
 
-  // Geo region code
   const geoRegion = country === 'Scotland'        ? 'GB-SCT'
                   : country === 'Wales'            ? 'GB-WLS'
                   : country === 'Northern Ireland' ? 'GB-NIR'
                   : 'GB-ENG';
 
-  // ── Focus keyword: Club Name (Yoast style — keyword first in title) ──
-  const focusKw = name;
-
-  // ── Title: [Club Name] - [Type] Club in [City] | Site ──
+  // Title: Club Name first (focus keyword), then qualifier, then brand
+  // Mirrors: "EV Charger Installation in Leeds | 12 OZEV-Approved Installers"
   const title = loc
-    ? `${name} - ${type} Club in ${loc} | The Rugby Club Directory`
-    : `${name} - ${type} Club | The Rugby Club Directory`;
+    ? `${name} | ${type} Club in ${loc} | UK Rugby Club Directory`
+    : `${name} | ${type} Club | UK Rugby Club Directory`;
 
-  // ── Meta description: club name prominent, location, description snippet ──
-  const metaDesc = `${name} is a ${type.toLowerCase()} club based in ${fullLoc}. ${desc}${desc.endsWith('.') ? '' : '.'} Find contact details, directions and club information.`;
+  // Meta description: club name in first sentence, location, snippet, CTA
+  const metaDesc = `${name} is a ${type.toLowerCase()} club based in ${fullLoc}. ${desc}${desc.endsWith('.') ? '' : '.'} View contact details, address and get directions.`;
 
-  // ── Keywords: club name leads, then location variants ──
+  // Keywords: club name leads (primary), then location + type variants
   const keywords = [
-    name,                                              // Primary: Club Name
-    `${name} rugby club`,                              // Club Name + rugby club
-    `${name} ${city}`,                                 // Club Name + city
-    `${type.toLowerCase()} clubs ${city}`,             // Type + city
-    `${type.toLowerCase()} clubs ${county}`,           // Type + county
-    `rugby near me ${city}`,                           // Rugby near me + city
-    `find a rugby club ${city}`,                       // Find a rugby club + city
-    `rugby clubs near me ${county}`,                   // Near me + county
-    `${type.toLowerCase()} ${country}`,                // Type + country
-    `${city} rugby`,                                   // City + rugby
-    `${county} rugby clubs`,                           // County + rugby clubs
-    country + ' rugby clubs',                          // Country + rugby clubs
-    type.toLowerCase() + ' club directory',            // Type + directory
-    'rugby near me',                                   // Generic
-    'The Rugby Club Directory'                         // Brand
+    name,
+    `${name} rugby`,
+    `${name} rugby club`,
+    `${type.toLowerCase()} ${city}`,
+    `rugby clubs ${city}`,
+    `rugby clubs ${county}`,
+    `rugby near me ${city}`,
+    `${city} rugby club`,
+    `${county} rugby clubs`,
+    `${country} rugby clubs`,
+    'find a rugby club',
+    'rugby near me',
   ].filter(Boolean).join(', ');
 
-  // ── Schema.org: SportsOrganization (most specific type) ──
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'SportsOrganization',
-    '@id': `${SITE}/club/${slug}#sportsorg`,
+    '@id': `${SITE}/?p=club/${slug}`,
     name,
     sport: 'Rugby',
     description: desc || `${name} is a ${type.toLowerCase()} club in ${fullLoc}.`,
-    url: `${SITE}/club/${slug}`,
+    url: `${SITE}/?p=club/${slug}`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: city || undefined,
@@ -321,52 +270,53 @@ function clubSeo(slug, club) {
       addressCountry: 'GB'
     },
     ...(lat && lng ? { geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng } } : {}),
-    ...(rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: rating, bestRating: '5', worstRating: '1', reviewCount: '10' } } : {}),
-    parentOrganization: { '@type': 'SportsOrganization', name: 'The Rugby Club Directory', url: SITE },
+    ...(club.rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: club.rating, bestRating: '5', worstRating: '1', reviewCount: '10' } } : {}),
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-        { '@type': 'ListItem', position: 2, name: type === 'Rugby Business' ? 'Rugby Joints' : type, item: `${SITE}/${type === 'Rugby Union' ? 'rugby-union' : type === 'Rugby League' ? 'rugby-league' : 'rugby-joints'}` },
-        { '@type': 'ListItem', position: 3, name, item: `${SITE}/club/${slug}` }
+        { '@type': 'ListItem', position: 2, name: type, item: `${SITE}/?p=rugby-${club.type === 'business' ? 'businesses' : club.type}` },
+        { '@type': 'ListItem', position: 3, name, item: `${SITE}/?p=club/${slug}` }
       ]
     }
   };
 
   return {
-    focusKw, title, desc: metaDesc, keywords,
-    canonical: `${SITE}/club/${slug}`,
-    robots: 'index, follow',
-    ogType: 'article',
+    title, desc: metaDesc, keywords,
+    canonical: `${SITE}/?p=club/${slug}`,
+    robots:    'index, follow',
+    ogType:    'article',
     geoRegion,
-    geoPlace: fullLoc,
-    geoPos:   lat && lng ? `${lat};${lng}` : '',
-    icbm:     lat && lng ? `${lat}, ${lng}` : '',
+    geoPlace:  fullLoc,
+    geoPos:    lat && lng ? `${lat};${lng}` : '',
+    icbm:      lat && lng ? `${lat}, ${lng}` : '',
     schema
   };
 }
 
-// ── Build complete <head> injection HTML ──────────────────────
+// ════════════════════════════════════════════════════════════════
+//  BUILD HEAD TAGS HTML
+// ════════════════════════════════════════════════════════════════
 function buildHeadTags(seo) {
-  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const e = (s) => String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const canonical = seo.canonical || SITE;
-  const ogImg     = seo.ogImage   || OG_IMAGE;
+  const ogImg     = OG_IMAGE;
   const schemaStr = typeof seo.schema === 'string' ? seo.schema : JSON.stringify(seo.schema, (k,v) => v === undefined ? undefined : v);
 
-  return `<!-- ✅ SEO by Netlify Edge Function — unique per page -->
+  return `<!-- SEO: UK Rugby Club Directory Edge Function v3 -->
 <title>${e(seo.title)}</title>
 <meta name="description" content="${e(seo.desc)}">
 <meta name="keywords" content="${e(seo.keywords)}">
 <meta name="robots" content="${e(seo.robots || 'index, follow')}">
-<meta name="author" content="The Rugby Club Directory">
-<meta name="application-name" content="The Rugby Club Directory">
-<meta name="theme-color" content="#1a3c6e">
+<meta name="author" content="${SITE_NAME}">
+<meta name="application-name" content="${SITE_NAME}">
+<meta name="theme-color" content="#0a1628">
 ${seo.geoRegion ? `<meta name="geo.region" content="${e(seo.geoRegion)}">` : ''}
 ${seo.geoPlace  ? `<meta name="geo.placename" content="${e(seo.geoPlace)}">` : ''}
 ${seo.geoPos    ? `<meta name="geo.position" content="${e(seo.geoPos)}">` : ''}
 ${seo.icbm      ? `<meta name="ICBM" content="${e(seo.icbm)}">` : ''}
 <link rel="canonical" href="${e(canonical)}">
-<meta property="og:site_name" content="The Rugby Club Directory">
+<meta property="og:site_name" content="${SITE_NAME}">
 <meta property="og:type" content="${e(seo.ogType || 'website')}">
 <meta property="og:title" content="${e(seo.title)}">
 <meta property="og:description" content="${e(seo.desc)}">
@@ -374,7 +324,6 @@ ${seo.icbm      ? `<meta name="ICBM" content="${e(seo.icbm)}">` : ''}
 <meta property="og:image" content="${ogImg}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${e(seo.title)}">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="${TWITTER}">
@@ -384,76 +333,74 @@ ${seo.icbm      ? `<meta name="ICBM" content="${e(seo.icbm)}">` : ''}
 <script type="application/ld+json">${schemaStr}</script>`.trim();
 }
 
-// ── Main edge function handler ────────────────────────────────
+// ════════════════════════════════════════════════════════════════
+//  EDGE FUNCTION HANDLER
+// ════════════════════════════════════════════════════════════════
 export default async function handler(request, context) {
-  const url      = new URL(request.url);
-  const path     = url.pathname.replace(/\/$/, '') || '/';
+  const url    = new URL(request.url);
+  const path   = url.pathname.replace(/\/$/, '') || '/';
+  const pParam = url.searchParams.get('p') || '';
 
-  // ── Fetch the original response from Netlify ──
+  // Fetch original response
   const response = await context.next();
-  const ct       = response.headers.get('content-type') || '';
+  const ct = response.headers.get('content-type') || '';
   if (!ct.includes('text/html')) return response;
 
   let html = await response.text();
   let seo;
 
-  // ── Route: individual club page /club/[slug] ──────────────
-  if (path.startsWith('/club/')) {
-    const slug = path.replace('/club/', '');
+  // ── Route: club page ──────────────────────────────────────
+  if (pParam.startsWith('club/')) {
+    const slug = pParam.replace('club/', '');
     const club = CLUBS_META[slug];
-
-    if (club) {
-      seo = clubSeo(slug, club);
-    } else {
-      // Club not in meta lookup — fallback title at minimum
-      seo = {
-        title:    `Rugby Club Profile | The Rugby Club Directory`,
-        desc:     `Find this rugby club on The Rugby Club Directory UK. View contact details, location and club information.`,
-        keywords: `rugby club, find a rugby club, rugby near me, The Rugby Club Directory`,
-        canonical: `${SITE}${path}`,
-        robots:   'index, follow',
-        ogType:   'website',
-        schema:   { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}${path}`, name: 'Rugby Club Profile' }
-      };
-    }
-
-  // ── Route: static pages ───────────────────────────────────
-  } else {
-    const staticSeo = STATIC_PAGES[path] || STATIC_PAGES['/'];
-    seo = {
-      ...staticSeo,
-      canonical: `${SITE}${path === '/' ? '' : path}`
+    seo = club ? clubSeo(slug, club) : {
+      title:    `Rugby Club | UK Rugby Club Directory`,
+      desc:     'Find this rugby club on the UK Rugby Club Directory. View contact details, location and club information.',
+      keywords: 'rugby club, find a rugby club, rugby near me',
+      canonical: `${SITE}/?p=${pParam}`,
+      robots:   'index, follow',
+      ogType:   'website',
+      schema:   { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/?p=${pParam}` }
     };
+
+  // ── Route: region page ────────────────────────────────────
+  } else if (pParam.startsWith('region/')) {
+    const region = pParam.replace('region/', '');
+    seo = { ...regionSeo(region), canonical: `${SITE}/?p=${pParam}` };
+
+  // ── Route: static ?p= pages ───────────────────────────────
+  } else if (pParam && STATIC_PAGES[`/?p=${pParam}`]) {
+    seo = { ...STATIC_PAGES[`/?p=${pParam}`], canonical: `${SITE}/?p=${pParam}` };
+
+  // ── Route: homepage or unknown ────────────────────────────
+  } else {
+    seo = { ...STATIC_PAGES['/'], canonical: `${SITE}/` };
   }
 
-  // ── Inject SEO into <head> ────────────────────────────────
-  const headTags = buildHeadTags(seo);
-
-  // Remove ALL existing title, meta, and canonical tags from head
-  // so we don't get duplicates
+  // ── Strip ALL old SEO tags then inject fresh ones ─────────
   html = html
-    // Remove existing <title>
     .replace(/<title>[^<]*<\/title>/gi, '')
-    // Remove existing meta description, keywords, robots, author, application-name,
-    // geo.*, og:*, twitter:*, theme-color
-    .replace(/<meta\s+(?:name|property)="(?:description|keywords|robots|author|application-name|theme-color|geo\.[a-z.]+|ICBM|og:[a-z:]+|twitter:[a-z:]+)[^"]*"[^>]*>/gi, '')
-    .replace(/<meta\s+(?:property|name)="(?:og:[^"]+|twitter:[^"]+)"[^>]*>/gi, '')
-    // Remove existing canonical
-    .replace(/<link\s+rel="canonical"[^>]*>/gi, '')
-    // Remove existing ld+json schema scripts
+    .replace(/<meta\s[^>]*(?:name|property)="(?:description|keywords|robots|author|application-name|theme-color|geo\.[^"]*|ICBM|og:[^"]*|twitter:[^"]*)"[^>]*\/?>/gi, '')
+    .replace(/<link\s[^>]*rel="canonical"[^>]*\/?>/gi, '')
     .replace(/<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/gi, '')
-    // Now insert fresh tags right after <head>
-    .replace(/(<head[^>]*>)/, `$1\n${headTags}\n`);
+    .replace(/(<head[^>]*>)/, `$1\n${buildHeadTags(seo)}\n`);
+
+  // ── Cache headers ─────────────────────────────────────────
+  // NO caching on homepage — ensures changes appear immediately
+  // Short cache on club pages, longer on static listing pages
+  const isHomepage = !pParam;
+  const isClub     = pParam.startsWith('club/');
+  const cacheCtrl  = isHomepage ? 'no-store' :
+                     isClub     ? 'public, max-age=1800, stale-while-revalidate=3600' :
+                                  'public, max-age=3600, stale-while-revalidate=7200';
 
   return new Response(html, {
     status: response.status,
     headers: {
       ...Object.fromEntries(response.headers),
       'content-type': 'text/html; charset=utf-8',
-      'x-seo-injected': 'true',
-      'cache-control': path.startsWith('/club/')
-        ? 'public, max-age=3600, stale-while-revalidate=86400'
-        : 'public, max-age=86400, stale-while-revalidate=604800',
+      'cache-control': cacheCtrl,
+      'x-seo-version': '3',
     },
   });
 }

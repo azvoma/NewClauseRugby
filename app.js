@@ -267,7 +267,7 @@ function setMeta(title, desc, keywords, url, schema, opts) {
 // ════════════════════════════════════════════════════════════════
 function renderClubPage(slug) {
   const c = slugMap[slug];
-  if (!c) { document.getElementById('pg-club').innerHTML = '<div class="con sec"><h2 style="padding:40px 0">Club not found</h2><p><a onclick="go('home')" style="color:var(--red);cursor:pointer">← Back to home</a></p></div>'; return; }
+  if (!c) { document.getElementById('pg-club').innerHTML = '<div class="con sec" style="padding:60px 0 80px"><h2 style="font-family:var(--fd);font-size:1.5rem;text-transform:uppercase;color:var(--navy);margin-bottom:12px">Club not found</h2><p><a onclick="go(&quot;home&quot;)" style="color:var(--red);cursor:pointer;font-weight:600">← Back to home</a></p></div>'; return; }
 
   const tl     = c.type==='union'?'Rugby Union':c.type==='league'?'Rugby League':'Rugby Business';
   const tc     = c.type;
