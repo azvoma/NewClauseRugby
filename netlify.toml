@@ -1,12 +1,95 @@
 # ════════════════════════════════════════════════════════════════
-#  The Rugby Club Directory — netlify.toml
-#  Edge Function: injects unique Yoast-style SEO per page
+#  The UK Rugby Club Directory — netlify.toml
+#  Edge Function: injects Yoast-style SEO per page
+#  Redirects: path-based URLs map to SPA (Item 7 — v2 prep)
 # ════════════════════════════════════════════════════════════════
 
 [build]
   publish = "."
 
-# Edge function runs on every request to inject server-side SEO
+# Edge function — injects server-side SEO on every HTML request
 [[edge_functions]]
   function = "seo"
   path     = "/*"
+
+# ── Path-based URL redirects (Item 7) ──────────────────────────
+# These clean URLs allow future migration away from hash routing
+# and enable Google to index each page as a distinct URL today
+
+# Club profiles: /club/leicester-tigers → SPA with ?p=club/leicester-tigers
+[[redirects]]
+  from   = "/club/:slug"
+  to     = "/?p=club/:slug"
+  status = 200
+
+# Region pages: /region/yorkshire → SPA with ?p=region/yorkshire
+[[redirects]]
+  from   = "/region/:name"
+  to     = "/?p=region/:name"
+  status = 200
+
+# County pages: /county/yorkshire → SPA with ?p=county/yorkshire  
+[[redirects]]
+  from   = "/county/:name"
+  to     = "/?p=county/:name"
+  status = 200
+
+# Directory pages
+[[redirects]]
+  from   = "/rugby-union"
+  to     = "/?p=rugby-union"
+  status = 200
+
+[[redirects]]
+  from   = "/rugby-league"
+  to     = "/?p=rugby-league"
+  status = 200
+
+[[redirects]]
+  from   = "/businesses"
+  to     = "/?p=businesses"
+  status = 200
+
+[[redirects]]
+  from   = "/register"
+  to     = "/?p=register"
+  status = 200
+
+[[redirects]]
+  from   = "/contact"
+  to     = "/?p=contact"
+  status = 200
+
+# ── Cache headers ────────────────────────────────────────────────
+# Images: long cache (they don't change often)
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"
+
+# JS/CSS: cache with revalidation
+[[headers]]
+  for = "/app.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/clubs_data.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+# Homepage: never cache (so updates show instantly)
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-store"

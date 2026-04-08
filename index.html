@@ -62,6 +62,19 @@
         <a onclick="go('region/wales')">Wales</a>
         <a onclick="go('region/scotland')">Scotland</a>
         <a onclick="go('region/northern-ireland')">N. Ireland</a>
+        <div style="height:1px;background:var(--gl);margin:4px 0"></div>
+        <a onclick="go('county/yorkshire')" style="color:var(--red);font-weight:600">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Rugby in Yorkshire
+        </a>
+        <a onclick="go('county/surrey')" style="color:var(--red);font-weight:600">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Rugby in Surrey
+        </a>
+        <a onclick="go('county/kent')" style="color:var(--red);font-weight:600">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Rugby in Kent
+        </a>
       </div>
     </div>
     <div class="ni">
@@ -241,6 +254,29 @@
         <button class="fb" onclick="filt('union','','north-east',this)">North East</button>
         <button class="fb" onclick="filt('union','','east',this)">East England</button>
       </div></div>
+      <div class="ds-s"><div class="ds-t">Age Groups</div><div class="ds-b" id="age-filters">
+        <button class="fb" onclick="filtTeam('all',this)">All Ages</button>
+        <button class="fb" onclick="filtTeam('Mini',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a6.5 6.5 0 0113 0v2"/></svg>
+          Minis (U7-U10)
+        </button>
+        <button class="fb" onclick="filtTeam('Junior',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Juniors (U11-U18)
+        </button>
+        <button class="fb" onclick="filtTeam('Senior',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/></svg>
+          Senior Men
+        </button>
+        <button class="fb" onclick="filtTeam('Women',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M8 18h8"/></svg>
+          Women
+        </button>
+        <button class="fb" onclick="filtTeam('Vets',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Vets
+        </button>
+      </div></div>
     </aside>
     <div><div class="dir-top">
       <div><h2>Rugby Union Clubs</h2><p>Showing <strong id="u-cnt">728</strong> clubs</p></div>
@@ -298,7 +334,61 @@
     <div class="ph-in"><div><h1 id="rgn-h1">Rugby Clubs</h1><p id="rgn-sub">Find local rugby clubs.</p></div>
     <div class="phc"><strong id="rgn-cnt">--</strong><small>Clubs Found</small></div></div>
   </div></div>
-  <section class="sec"><div class="con"><div class="cg3" id="rgn-list"></div></div></section>
+  <section class="sec"><div class="con">
+    <div id="county-links" style="display:none;margin-bottom:28px">
+      <h3 style="font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Browse by County</h3>
+      <div id="county-list-links" class="county-chips"></div>
+    </div>
+    <div class="cg3" id="rgn-list"></div>
+  </div></section>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE: COUNTY (dedicated landing pages)
+══════════════════════════════════════════════ -->
+<div id="pg-county" class="pg">
+  <div class="ph"><div class="con">
+    <nav class="bc"><a onclick="go('home')">Home</a><span class="bc-sep">&#x203A;</span><a id="county-region-bc" onclick="" style="color:rgba(255,255,255,.55)">Region</a><span class="bc-sep">&#x203A;</span><span id="county-bc" style="color:var(--gold)">County</span></nav>
+    <div class="ph-in">
+      <div><div class="phb" id="county-badge">Rugby Union</div><h1 id="county-h1">Rugby Clubs</h1><p id="county-sub">Find rugby clubs in your county.</p></div>
+      <div class="phc"><strong id="county-cnt">--</strong><small>Clubs Found</small></div>
+    </div>
+  </div></div>
+  <section class="sec"><div class="con">
+    <div class="dir-lay">
+      <aside class="dsb">
+        <div class="ds-s"><div class="ds-t">Type</div><div class="ds-b" id="county-type-filters">
+          <button class="fb active" onclick="filtCounty('all',this)">All Types</button>
+          <button class="fb" onclick="filtCounty('union',this)">Rugby Union</button>
+          <button class="fb" onclick="filtCounty('league',this)">Rugby League</button>
+        </div></div>
+        <div class="ds-s"><div class="ds-t">Age Groups</div><div class="ds-b" id="county-age-filters">
+          <button class="fb active" onclick="filtCountyAge('all',this)">All Ages</button>
+          <button class="fb" onclick="filtCountyAge('Mini',this)">Minis</button>
+          <button class="fb" onclick="filtCountyAge('Junior',this)">Juniors</button>
+          <button class="fb" onclick="filtCountyAge('Senior',this)">Senior</button>
+          <button class="fb" onclick="filtCountyAge('Women',this)">Women</button>
+          <button class="fb" onclick="filtCountyAge('Vets',this)">Vets</button>
+        </div></div>
+      </aside>
+      <div>
+        <div class="dir-top">
+          <div><h2 id="county-dir-title">Rugby Clubs</h2><p>Showing <strong id="county-list-cnt">--</strong> clubs</p></div>
+          <div class="dsr"><span class="di">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span><input id="county-srch" type="text" placeholder="Search clubs&#x2026;" oninput="srchCounty(this.value)" aria-label="Search county clubs"></div>
+        </div>
+        <div class="cg3" id="county-clubs-list"></div>
+      </div>
+    </div>
+  </div></section>
+  <div class="cta-band">
+    <div class="con"><h2>Is Your Club Listed?</h2><p>Register your club for free and get your own profile page reaching local players.</p>
+    <button class="btn-wh" onclick="go('register')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Register Your Club Free
+    </button></div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════

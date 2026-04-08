@@ -283,7 +283,7 @@ function clubSeo(slug, club) {
 
   return {
     title, desc: metaDesc, keywords,
-    canonical: `${SITE}/?p=club/${slug}`,
+    canonical: `${SITE}/club/${slug}`,
     robots:    'index, follow',
     ogType:    'article',
     geoRegion,
@@ -340,6 +340,10 @@ export default async function handler(request, context) {
   const url    = new URL(request.url);
   const path   = url.pathname.replace(/\/$/, '') || '/';
   const pParam = url.searchParams.get('p') || '';
+
+  // Item 7: Also resolve clean path URLs like /club/leicester-tigers
+  // These come via Netlify redirect rules (200 rewrites to ?p=)
+  // But we still read pParam which Netlify populates via the redirect
 
   // Fetch original response
   const response = await context.next();

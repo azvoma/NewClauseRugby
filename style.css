@@ -98,3 +98,20 @@ footer{background:var(--navy);color:var(--gm)}.ft-t{padding:58px 0 34px}.ftg{dis
 .y-share-btn:hover{opacity:.85;transform:translateY(-1px)}
 @media(max-width:900px){.y-layout{grid-template-columns:1fr}.y-sidebar{position:static}}
 @media(max-width:640px){.y-title{font-size:1.35rem}.y-logo-wrap{width:70px;height:70px}}
+
+.bc-light{color:var(--grey)}.bc-light a{color:var(--grey)}.bc-light a:hover{color:var(--navy)}.bc-light .bc-sep{color:var(--gl)}.bc-light span:last-child{color:var(--navy);font-weight:600}
+
+/* ── TEAM TAGS & TRAINING (Item 2 & 4) ─────────────────────── */
+.cc-teams{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.team-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:6px;background:var(--off);border:1px solid var(--gl);color:var(--gd)}
+.cc-training{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--grey);margin-top:5px;margin-bottom:2px}
+.cc-training svg{width:12px;height:12px;flex-shrink:0;color:var(--red)}
+
+/* ── COUNTY LANDING PAGES (Item 5) ─────────────────────────── */
+.county-chips{display:flex;flex-wrap:wrap;gap:8px}
+.county-chip{background:var(--off);border:1px solid var(--gl);border-radius:20px;padding:5px 14px;font-size:.8rem;color:var(--gd);cursor:pointer;transition:var(--t);font-family:var(--fb)}
+.county-chip:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* ── CLAIM LISTING CARD (Item 6) ────────────────────────────── */
+.claim-card{background:#fffbeb;border:1px solid #fcd34d}
+.claim-card input:focus,.claim-card select:focus{border-color:var(--red)!important}

@@ -47,10 +47,18 @@ if (typeof CSV_CLUBS !== 'undefined') {
     seenNames.add(name.toLowerCase());
     const club = {
       id:r[0], name, type:r[2]||'union', country:r[3]||'England', region:r[4]||'england',
-      city:r[5]||'', county:r[6]||'', desc:r[7]||`Rugby club based in ${r[5]||'the UK'}.`,
+      city:r[5]||'', county:r[6]||'', desc:(()=>{
+        const d=r[7]||'';
+        if(d&&!d.startsWith('Rugby club based in')) return d;
+        const city=r[5]||''; const county=r[6]||''; const country=r[3]||'England';
+        const type=r[2]||'union';
+        const typeStr=type==='union'?'rugby union':type==='league'?'rugby league':'rugby';
+        const loc=[city,county,country].filter(Boolean).join(', ');
+        return `${name} is a ${typeStr} club based in ${loc}. We welcome players of all abilities from minis and juniors through to senior and veterans rugby. Contact us to find out about training times, membership and how to get involved.`;
+      })(),
       website:r[8]||'', phone:r[9]||'', email:r[10]||'', logo:r[11]||'',
       lat:r[12]||'', lng:r[13]||'', rating:r[14]||'', slug:r[15]||'',
-      address:r[16]||'', featured:false
+      address:r[16]||'', training:r[17]||'', teams:r[18]||'', featured:false
     };
     DB.push(club);
     if (club.slug) slugMap[club.slug] = club;
@@ -81,11 +89,129 @@ console.log(`✓ Directory: ${DB.length} clubs | ${DB.filter(c=>c.logo).length} 
 //  go() sets the hash for instant client-side navigation AND
 //  pushes a ?p= history state so crawlers can read the URL.
 // ════════════════════════════════════════════════════════════════
+
+const COUNTIES = {
+  'yorkshire':          {name:'Yorkshire',region:'yorkshire',country:'England'},
+  'surrey':             {name:'Surrey',region:'london',country:'England'},
+  'kent':               {name:'Kent',region:'london',country:'England'},
+  'lancashire':         {name:'Lancashire',region:'north-west',country:'England'},
+  'greater-manchester': {name:'Greater Manchester',region:'north-west',country:'England'},
+  'middlesex':          {name:'Middlesex',region:'london',country:'England'},
+  'essex':              {name:'Essex',region:'east',country:'England'},
+  'hampshire':          {name:'Hampshire',region:'south-east',country:'England'},
+  'gloucestershire':    {name:'Gloucestershire',region:'south-west',country:'England'},
+  'somerset':           {name:'Somerset',region:'south-west',country:'England'},
+  'devon':              {name:'Devon',region:'south-west',country:'England'},
+  'cornwall':           {name:'Cornwall',region:'south-west',country:'England'},
+  'northamptonshire':   {name:'Northamptonshire',region:'midlands',country:'England'},
+  'leicestershire':     {name:'Leicestershire',region:'midlands',country:'England'},
+  'warwickshire':       {name:'Warwickshire',region:'midlands',country:'England'},
+  'lincolnshire':       {name:'Lincolnshire',region:'east',country:'England'},
+  'suffolk':            {name:'Suffolk',region:'east',country:'England'},
+  'west-yorkshire':     {name:'West Yorkshire',region:'yorkshire',country:'England'},
+  'south-yorkshire':    {name:'South Yorkshire',region:'yorkshire',country:'England'},
+  'north-yorkshire':    {name:'North Yorkshire',region:'yorkshire',country:'England'},
+  'glamorgan':          {name:'Glamorgan',region:'wales',country:'Wales'},
+  'gwent':              {name:'Gwent',region:'wales',country:'Wales'},
+  'pembrokeshire':      {name:'Pembrokeshire',region:'wales',country:'Wales'},
+  'lothian':            {name:'Lothian',region:'scotland',country:'Scotland'},
+  'strathclyde':        {name:'Strathclyde',region:'scotland',country:'Scotland'},
+  'borders':            {name:'Scottish Borders',region:'scotland',country:'Scotland'},
+};
+
+let countyState = {clubs:[], page:1, county:'', type:'all', age:'all'};
+
+function loadCounty(countySlug) {
+  const cd = COUNTIES[countySlug];
+  if(!cd) { go('home'); return; }
+
+  const allClubs = DB.filter(c => {
+    const ctyMatch = c.county && c.county.toLowerCase().includes(cd.name.toLowerCase().split(' ')[0]);
+    const regionMatch = c.region === cd.region && c.country === cd.country;
+    return ctyMatch || (cd.country === 'England' && regionMatch);
+  });
+
+  countyState = {clubs:allClubs, page:1, county:countySlug, type:'all', age:'all'};
+
+  // Update page elements
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  const setHTML = (id,v) => { const el=document.getElementById(id); if(el) el.innerHTML=v; };
+  const setAttr = (id,attr,v) => { const el=document.getElementById(id); if(el) el.setAttribute(attr,v); };
+
+  set('county-bc', cd.name);
+  set('county-h1', `Rugby Clubs in ${cd.name}`);
+  set('county-sub', `Find rugby union, rugby league and sports clubs across ${cd.name}.`);
+  set('county-cnt', allClubs.length);
+  set('county-list-cnt', allClubs.length);
+  set('county-dir-title', `Rugby Clubs in ${cd.name}`);
+  setAttr('county-region-bc', 'onclick', `go('region/${cd.region}')`);
+  set('county-region-bc', cd.region.charAt(0).toUpperCase()+cd.region.slice(1).replace(/-/g,' '));
+
+  // Reset filters
+  document.querySelectorAll('#county-type-filters .fb, #county-age-filters .fb').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#county-type-filters .fb')?.classList.add('active');
+  document.querySelector('#county-age-filters .fb')?.classList.add('active');
+
+  renderCountyClubs();
+
+  // SEO
+  const kw = `rugby clubs ${cd.name}, rugby ${cd.name}, rugby union ${cd.name}, rugby league ${cd.name}, find rugby club ${cd.name}, rugby near me ${cd.name}, ${cd.name} rugby teams, junior rugby ${cd.name}, women's rugby ${cd.name}`;
+  setMeta(
+    `Rugby Clubs in ${cd.name} | Find a Club Near Me | UK Rugby Club Directory`,
+    `Find ${allClubs.length} rugby clubs in ${cd.name}. Browse rugby union and rugby league clubs with contact details, training times and maps. Join a club near you today.`,
+    kw,
+    `#county/${countySlug}`,
+    {"@context":"https://schema.org","@type":"CollectionPage","name":`Rugby Clubs in ${cd.name}`,"url":`https://ukrugbyclubdirectory.co.uk/#county/${countySlug}`,"description":`${allClubs.length} rugby clubs in ${cd.name}`,"numberOfItems":allClubs.length},
+    {geoRegion: cd.country==='Scotland'?'GB-SCT':cd.country==='Wales'?'GB-WLS':'GB-ENG', geoPlacename: cd.name}
+  );
+}
+
+function renderCountyClubs() {
+  let list = [...countyState.clubs];
+  if(countyState.type !== 'all') list = list.filter(c=>c.type===countyState.type);
+  if(countyState.age !== 'all') {
+    const age = countyState.age;
+    list = list.filter(c=>{
+      const tags=(c.teams||'').toLowerCase();
+      if(age==='Mini') return tags.includes('mini')||tags.includes('u7')||tags.includes('u8');
+      if(age==='Junior') return tags.includes('junior')||tags.includes('u11')||tags.includes('u14');
+      if(age==='Women') return tags.includes('women')||tags.includes('ladies');
+      if(age==='Vets') return tags.includes('vet');
+      return true;
+    });
+  }
+  const srch = (document.getElementById('county-srch')?.value||'').toLowerCase();
+  if(srch) list = list.filter(c=>c.name.toLowerCase().includes(srch)||c.city.toLowerCase().includes(srch));
+  const el = document.getElementById('county-clubs-list');
+  if(el) el.innerHTML = list.length ? list.map(clubCard).join('') : emptyState();
+  const cnt = document.getElementById('county-list-cnt');
+  if(cnt) cnt.textContent = list.length;
+}
+
+function filtCounty(type,btn) {
+  document.querySelectorAll('#county-type-filters .fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  countyState.type = type;
+  renderCountyClubs();
+}
+
+function filtCountyAge(age,btn) {
+  document.querySelectorAll('#county-age-filters .fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  countyState.age = age;
+  renderCountyClubs();
+}
+
+function srchCounty(q) {
+  renderCountyClubs();
+}
+
 function route() {
-  // Prefer ?p= param (set by go()) over hash (for direct loads)
-  const urlP  = new URLSearchParams(location.search).get('p') || '';
-  const hashP = location.hash.replace('#','');
-  const raw   = urlP || hashP || 'home';
+  // Read from clean path (Item 7) or ?p= fallback or hash
+  const pathRaw = location.pathname.replace(/^\//, '');
+  const urlP    = new URLSearchParams(location.search).get('p') || '';
+  const hashP   = location.hash.replace('#','');
+  const raw     = pathRaw && pathRaw !== '' ? pathRaw : urlP || hashP || 'home';
   const parts = raw.split('/');
   const page  = parts[0];
   const param = parts.slice(1).join('/');
@@ -148,6 +274,10 @@ function route() {
       {robots:'noindex,follow'}
     );
   }
+  else if (page === 'county' && param) {
+    showPg('pg-county');
+    loadCounty(param);
+  }
   else {
     showPg('pg-home'); updateNavAct('home');
     setMeta(
@@ -176,17 +306,20 @@ function updateNavAct(id) {
   if (el) el.classList.add('act');
 }
 function go(path) {
-  // Update ?p= param silently for SEO edge function (no page reload)
-  const url = new URL(location.href);
-  url.searchParams.set('p', path);
-  url.hash = path;
-  history.replaceState(null, '', url.toString());
-  // Trigger route directly — avoids hashchange event delay
+  // Push clean path URL to browser bar (Item 7 — path-based URLs)
+  // e.g. /club/leicester-tigers instead of ?p=club/leicester-tigers
+  const cleanPath = '/' + path;
+  history.pushState({p: path}, '', cleanPath);
+  // Trigger route directly
   route();
 }
 
-// hashchange handles browser back/forward; go() calls route() directly
-window.addEventListener('hashchange', route);
+// Handle browser back/forward with clean paths
+window.addEventListener('popstate', function(e) {
+  route();
+});
+
+// load fires on initial page load
 window.addEventListener('load', route);
 
 // ════════════════════════════════════════════════════════════════
@@ -314,11 +447,11 @@ function renderClubPage(slug) {
     <!-- BREADCRUMB -->
     <div style="background:#fff;border-bottom:1px solid #e4e9f0">
       <div class="con" style="padding-top:10px;padding-bottom:10px">
-        <nav class="bc">
-          <a onclick="go('home')">Home</a><span class="bc-sep">›</span>
-          <a onclick="go('rugby-${tc==='business'?'businesses':tc}')">${tc==='union'?'Rugby Union':tc==='league'?'Rugby League':'Businesses'}</a><span class="bc-sep">›</span>
-          <a onclick="go('region/${c.region}')">${regionLabel}</a><span class="bc-sep">›</span>
-          <span style="color:var(--gd)">${c.name}</span>
+        <nav class="bc" style="color:#7a8c9e">
+          <a onclick="go('home')" style="color:#7a8c9e">Home</a><span style="color:#d1d5db;margin:0 3px">›</span>
+          <a onclick="go('rugby-${tc==='business'?'businesses':tc}')" style="color:#7a8c9e">${tc==='union'?'Rugby Union':tc==='league'?'Rugby League':'Businesses'}</a><span style="color:#d1d5db;margin:0 3px">›</span>
+          <a onclick="go('region/${c.region}')" style="color:#7a8c9e">${regionLabel}</a><span style="color:#d1d5db;margin:0 3px">›</span>
+          <span style="color:#0a1628;font-weight:600">${c.name}</span>
         </nav>
       </div>
     </div>
@@ -373,6 +506,8 @@ function renderClubPage(slug) {
               ${c.phone?`<tr><td class="y-td-lbl">Phone</td><td class="y-td-val"><a href="tel:${c.phone}" style="color:var(--red)">${c.phone}</a></td></tr>`:''}
               ${c.email?`<tr><td class="y-td-lbl">Email</td><td class="y-td-val"><a href="mailto:${c.email}" style="color:var(--red)">${c.email}</a></td></tr>`:''}
               ${c.website&&c.website.startsWith('http')?`<tr><td class="y-td-lbl">Website</td><td class="y-td-val"><a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red)">${c.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a></td></tr>`:''}
+              ${c.training?`<tr><td class="y-td-lbl">Training</td><td class="y-td-val" style="font-weight:600;color:var(--navy)">${c.training}</td></tr>`:''}
+              ${c.teams?`<tr><td class="y-td-lbl">Teams</td><td class="y-td-val">${c.teams.split(',').map(t=>`<span style="display:inline-block;background:var(--off);border:1px solid var(--gl);border-radius:5px;padding:1px 7px;font-size:.75rem;margin:1px 2px">${t.trim()}</span>`).join('')}</td></tr>`:''}
               ${c.rating?`<tr><td class="y-td-lbl">Google Rating</td><td class="y-td-val">${starsHtml(parseFloat(c.rating))} ${c.rating}/5</td></tr>`:''}
             </table>
           </div>
@@ -459,15 +594,28 @@ function renderClubPage(slug) {
             </div>
           </div>
 
-          <!-- Own this listing -->
-          <div class="y-card" style="background:#fff9e6;border:1px solid #f0d060">
-            <div style="display:flex;align-items:flex-start;gap:10px">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <div>
-                <div style="font-size:.83rem;font-weight:700;color:#333;margin-bottom:4px">Own this club?</div>
-                <div style="font-size:.78rem;color:#666;margin-bottom:10px">Update your listing details, add photos and more — completely free.</div>
-                <a onclick="go('register')" class="y-btn-outline" style="font-size:.78rem;padding:6px 14px;cursor:pointer">Update Listing Free</a>
-              </div>
+          <!-- Claim this listing — Item 6 -->
+          <div class="y-card claim-card" id="claim-${c.slug}">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span style="font-size:.83rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px">Own this club?</span>
+            </div>
+            <p style="font-size:.78rem;color:var(--grey);line-height:1.6;margin-bottom:12px">Claim your free listing to update contact details, add training times, upload your badge and more.</p>
+            <div id="claim-form-${c.slug}">
+              <div style="margin-bottom:8px"><input type="text" id="claim-name-${c.slug}" placeholder="Your name" style="width:100%;padding:8px 10px;border:2px solid var(--gl);border-radius:6px;font-size:.82rem;outline:none"></div>
+              <div style="margin-bottom:8px"><input type="email" id="claim-email-${c.slug}" placeholder="Club email address" style="width:100%;padding:8px 10px;border:2px solid var(--gl);border-radius:6px;font-size:.82rem;outline:none"></div>
+              <div style="margin-bottom:10px"><select id="claim-role-${c.slug}" style="width:100%;padding:8px 10px;border:2px solid var(--gl);border-radius:6px;font-size:.82rem;color:var(--gd);outline:none;background:#fff">
+                <option value="">Your role at the club</option>
+                <option>Club Secretary</option>
+                <option>Club Chairman</option>
+                <option>Head Coach</option>
+                <option>Team Manager</option>
+                <option>Club Member</option>
+              </select></div>
+              <button onclick="submitClaim('${c.slug}','${c.name.replace(/'/g,'&#39;')}')" class="y-btn-primary" style="width:100%;justify-content:center">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Claim Free Listing
+              </button>
             </div>
           </div>
 
@@ -483,6 +631,23 @@ function renderClubPage(slug) {
   </div>`;
 
   document.getElementById('pg-club').innerHTML = html;
+}
+
+function submitClaim(slug, clubName) {
+  const name  = (document.getElementById('claim-name-'+slug)||{}).value||'';
+  const email = (document.getElementById('claim-email-'+slug)||{}).value||'';
+  const role  = (document.getElementById('claim-role-'+slug)||{}).value||'';
+  if(!name||!email) { alert('Please enter your name and email address.'); return; }
+  if(!email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  // In production this would POST to a backend/Netlify function
+  // For now show confirmation and log
+  const form = document.getElementById('claim-form-'+slug);
+  if(form) form.innerHTML = `<div style="text-align:center;padding:12px 0">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 8px"><polyline points="20 6 9 17 4 12"/></svg>
+    <div style="font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:4px">Request Received!</div>
+    <div style="font-size:.77rem;color:var(--grey);line-height:1.6">We'll verify your connection to ${clubName} and be in touch at ${email} within 2 business days.</div>
+  </div>`;
+  console.log('Claim request:', {slug, clubName, name, email, role});
 }
 
 function swClubTab(id, btn) {
@@ -689,6 +854,28 @@ function srchDir(type,q){
   const st=S[type]; initDir(type,'','',q);
 }
 
+function filtTeam(team,btn){
+  document.getElementById('age-filters').querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(team==='all'){ initDir('union','','',''); return; }
+  // Filter by team tag — show clubs that have this team type
+  const list=DB.filter(c=>{
+    if(c.type!=='union') return false;
+    const tags=(c.teams||'').toLowerCase();
+    const name=c.name.toLowerCase();
+    // Mini clubs
+    if(team==='Mini') return tags.includes('mini')||tags.includes('u7')||tags.includes('u8')||tags.includes('u9')||tags.includes('u10')||name.includes('mini');
+    if(team==='Junior') return tags.includes('junior')||tags.includes('u11')||tags.includes('u12')||tags.includes('u14')||tags.includes('u16')||tags.includes('u18')||name.includes('junior');
+    if(team==='Women') return tags.includes('women')||tags.includes('ladies')||name.includes('women')||name.includes('ladies');
+    if(team==='Vets') return tags.includes('vet')||name.includes('vet');
+    if(team==='Senior') return true; // All clubs have senior teams
+    return true;
+  });
+  S['union']={list,page:1};
+  renderDir('union');
+  const rc=document.getElementById('u-cnt'); if(rc) rc.textContent=list.length;
+}
+
 function initBiz(){
   const list=DB.filter(c=>c.type==='business');
   document.getElementById('b-list').innerHTML=list.length?list.map(clubCard).join(''):emptyState();
@@ -726,13 +913,25 @@ function clubCard(c) {
   const logoH=c.logo?`<img class="cc-logo" src="${c.logo}" alt="${c.name} badge" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
   const phShow=c.logo?'style="display:none"':'';
   const ratH=c.rating?`<div class="cc-rat"><svg fill="${parseFloat(c.rating)>=4?'var(--gold)':'none'}" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>${c.rating}</div>`:'<div></div>';
+  // Parse team tags from teams field or generate defaults
+  const teamTags = (()=>{
+    if(c.teams) return c.teams.split(',').map(t=>t.trim()).filter(Boolean);
+    // Default tags based on club type
+    if(c.type==='union') return ['Senior','Junior','Mini'];
+    if(c.type==='league') return ['Senior','Junior'];
+    return [];
+  })();
+  const teamsHtml = teamTags.slice(0,3).map(t=>`<span class="team-tag">${t}</span>`).join('');
+  const trainingHtml = c.training ? `<div class="cc-training"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${c.training}</div>` : '';
   return `<div class="club-card" onclick="go('club/${c.slug}')" role="link" tabindex="0" aria-label="View ${c.name} profile" onkeydown="if(event.key==='Enter')go('club/${c.slug}')">
     <div class="cc-head">${c.featured?'<span class="cc-feat">⭐ Featured</span>':''}${logoH}<div class="cc-ph" ${phShow}>${ballSvg()}</div></div>
     <div class="cc-body">
       <span class="type-b ${tc}">${tl}</span>
       <div class="cc-nm">${c.name}</div>
       <div class="cc-loc"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${c.city}${c.county?', '+c.county:''}</div>
+      ${trainingHtml}
       <p class="cc-desc">${c.desc}</p>
+      ${teamsHtml?`<div class="cc-teams">${teamsHtml}</div>`:''}
     </div>
     <div class="cc-foot">${ratH}<span class="cc-view">View Profile <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div>
   </div>`;
