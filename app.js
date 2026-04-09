@@ -8,24 +8,24 @@
 
 // ── HARDCODED ELITE / FEATURED CLUBS ─────────────────────────────
 const ELITE = [
-  {id:1,name:'Leicester Tigers',type:'union',country:'England',region:'midlands',city:'Leicester',county:'Leicestershire',desc:'One of England\'s most decorated rugby clubs with 10 Premiership titles. Founded in 1880, playing at Welford Road Stadium. A cornerstone of English rugby with legendary players and a remarkable trophy-laden history.',website:'https://www.leicestertigers.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/a/ac/Leicester_Tigers_logo.svg/150px-Leicester_Tigers_logo.svg.png',featured:true,rating:'4.6',phone:'+44 116 319 8888',email:'enquiries@tigers.co.uk',address:'Aylestone Rd, Leicester LE2 7TR',lat:'52.6186',lng:'-1.1341',slug:'leicester-tigers'},
+  {id:1,name:'Leicester Tigers',type:'union',country:'England',region:'midlands',city:'Leicester',county:'Leicestershire',desc:'One of England\'s most decorated rugby clubs with 10 Premiership titles. Founded in 1880, playing at Welford Road Stadium. A cornerstone of English rugby with legendary players and a remarkable trophy-laden history.',website:'https://www.leicestertigers.com',logo:'badges/leicester-tigers.jpg',featured:true,rating:'4.6',phone:'+44 116 319 8888',email:'enquiries@tigers.co.uk',address:'Aylestone Rd, Leicester LE2 7TR',lat:'52.6186',lng:'-1.1341',slug:'leicester-tigers'},
   {id:2,name:'Saracens',type:'union',country:'England',region:'london',city:'London',county:'Greater London',desc:'Multiple Premiership and European Champions Cup winners. Based at StoneX Stadium, Saracens are one of the most successful clubs in the history of English and European rugby union.',website:'https://www.saracens.com',logo:'https://upload.wikimedia.org/wikipedia/en/3/3f/Saracens_F.C._Logo.svg',featured:true,rating:'4.5',phone:'+44 208 455 8181',email:'',address:'StoneX Stadium, Greenlands Lane, London NW4 1RL',lat:'51.5865',lng:'-0.2326',slug:'saracens',founded:'1876',colours:'Black & Red',league:'Gallagher Premiership',teams:'Senior XV,Women,Colts (U18),Under 16,Under 14,Minis',training:'Tue & Thu evenings (Senior), Sat mornings (Juniors)',honours:'5× Premiership Champions, 3× European Champions Cup'},
   {id:3,name:'Harlequins',type:'union',country:'England',region:'london',city:'Twickenham',county:'Greater London',desc:'One of rugby\'s founding clubs based at The Stoop. Famous for distinctive quartered jerseys and free-flowing attacking rugby. Multiple Premiership title winners with a loyal London fanbase.',website:'https://www.quins.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/Harlequins_crest.svg/150px-Harlequins_crest.svg.png',featured:true,rating:'4.5',phone:'+44 208 410 6000',email:'',address:'The Stoop, Langhorn Drive, Twickenham TW2 7SX',lat:'51.4513',lng:'-0.3398',slug:'harlequins'},
-  {id:4,name:'Northampton Saints',type:'union',country:'England',region:'midlands',city:'Northampton',county:'Northamptonshire',desc:'Premiership club at Franklin\'s Gardens with passionate support and rich heritage in English rugby. Founded in 1880, the Saints have been Premiership champions and consistent European contenders.',website:'https://www.northamptonsaints.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Northampton_Saints_Logo.svg/150px-Northampton_Saints_Logo.svg.png',featured:true,rating:'4.4',phone:'+44 1604 751543',email:'',address:"Franklin's Gardens, Weedon Road, Northampton NN5 5BG",lat:'52.2443',lng:'-0.9126',slug:'northampton-saints'},
-  {id:5,name:'Bath Rugby',type:'union',country:'England',region:'south-west',city:'Bath',county:'Somerset',desc:'Historic club at the Recreation Ground in the heart of Bath city centre. Multiple Premiership and European champions. One of England\'s most storied and successful rugby clubs.',website:'https://www.bathrugby.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Bath_Rugby_crest.svg/150px-Bath_Rugby_crest.svg.png',featured:true,rating:'4.4',phone:'+44 1225 325200',email:'',address:'Recreation Ground, Bath BA2 6PW',lat:'51.3808',lng:'-2.3601',slug:'bath-rugby'},
-  {id:6,name:'Exeter Chiefs',type:'union',country:'England',region:'south-west',city:'Exeter',county:'Devon',desc:'Premiership champions at Sandy Park. Remarkable rise from National One to England\'s elite. Back-to-back Premiership and Champions Cup winners with passionate Devon support.',website:'https://www.exeterchiefs.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Exeter_Chiefs_new_logo_2022.png/150px-Exeter_Chiefs_new_logo_2022.png',featured:true,rating:'4.6',phone:'+44 1392 411243',email:'',address:'Sandy Park, Exeter EX2 7NN',lat:'50.7230',lng:'-3.4895',slug:'exeter-chiefs'},
+  {id:4,name:'Northampton Saints',type:'union',country:'England',region:'midlands',city:'Northampton',county:'Northamptonshire',desc:'Premiership club at Franklin\'s Gardens with passionate support and rich heritage in English rugby. Founded in 1880, the Saints have been Premiership champions and consistent European contenders.',website:'https://www.northamptonsaints.co.uk',logo:'badges/northampton-saints.png',featured:true,rating:'4.4',phone:'+44 1604 751543',email:'',address:"Franklin's Gardens, Weedon Road, Northampton NN5 5BG",lat:'52.2443',lng:'-0.9126',slug:'northampton-saints'},
+  {id:5,name:'Bath Rugby',type:'union',country:'England',region:'south-west',city:'Bath',county:'Somerset',desc:'Historic club at the Recreation Ground in the heart of Bath city centre. Multiple Premiership and European champions. One of England\'s most storied and successful rugby clubs.',website:'https://www.bathrugby.com',logo:'badges/bath-rugby.png',featured:true,rating:'4.4',phone:'+44 1225 325200',email:'',address:'Recreation Ground, Bath BA2 6PW',lat:'51.3808',lng:'-2.3601',slug:'bath-rugby'},
+  {id:6,name:'Exeter Chiefs',type:'union',country:'England',region:'south-west',city:'Exeter',county:'Devon',desc:'Premiership champions at Sandy Park. Remarkable rise from National One to England\'s elite. Back-to-back Premiership and Champions Cup winners with passionate Devon support.',website:'https://www.exeterchiefs.co.uk',logo:'badges/exeter-chiefs.jpg',featured:true,rating:'4.6',phone:'+44 1392 411243',email:'',address:'Sandy Park, Exeter EX2 7NN',lat:'50.7230',lng:'-3.4895',slug:'exeter-chiefs'},
   {id:7,name:'Gloucester Rugby',type:'union',country:'England',region:'south-west',city:'Gloucester',county:'Gloucestershire',desc:'The Cherry and Whites at iconic Kingsholm. West Country club with fervent support and consistent top-flight Premiership pedigree for over a century of competitive rugby.',website:'https://www.gloucesterrugby.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Gloucester_Rugby_%282018%29_logo.svg/150px-Gloucester_Rugby_%282018%29_logo.svg.png',featured:true,rating:'4.3',phone:'+44 1452 872000',email:'',address:'Kingsholm Road, Gloucester GL1 3AX',lat:'51.8696',lng:'-2.2421',slug:'gloucester-rugby'},
-  {id:8,name:'Bristol Bears',type:'union',country:'England',region:'south-west',city:'Bristol',county:'Bristol',desc:'Premiership rugby at Ashton Gate Stadium. Ambitious club known for attacking play and a rapidly growing fanbase. One of the best-supported clubs in the South West of England.',website:'https://www.bristolbears.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Bristol_Bears_logo.svg/150px-Bristol_Bears_logo.svg.png',featured:true,rating:'4.3',phone:'+44 117 963 0542',email:'',address:'Ashton Gate Stadium, Bristol BS3 2EJ',lat:'51.4400',lng:'-2.6200',slug:'bristol-bears'},
-  {id:9,name:'Sale Sharks',type:'union',country:'England',region:'north-west',city:'Sale',county:'Greater Manchester',desc:'North West England\'s flagship Premiership club. The Sharks play at AJ Bell Stadium with a fiercely loyal Greater Manchester fanbase and a strong tradition in English rugby.',website:'https://www.salesharks.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Sale_Sharks_badge.svg/150px-Sale_Sharks_badge.svg.png',featured:true,rating:'4.3',phone:'+44 161 283 1861',email:'',address:'AJ Bell Stadium, Salford M5 5LJ',lat:'53.4872',lng:'-2.2913',slug:'sale-sharks'},
+  {id:8,name:'Bristol Bears',type:'union',country:'England',region:'south-west',city:'Bristol',county:'Bristol',desc:'Premiership rugby at Ashton Gate Stadium. Ambitious club known for attacking play and a rapidly growing fanbase. One of the best-supported clubs in the South West of England.',website:'https://www.bristolbears.co.uk',logo:'badges/bristol-bears.png',featured:true,rating:'4.3',phone:'+44 117 963 0542',email:'',address:'Ashton Gate Stadium, Bristol BS3 2EJ',lat:'51.4400',lng:'-2.6200',slug:'bristol-bears'},
+  {id:9,name:'Sale Sharks',type:'union',country:'England',region:'north-west',city:'Sale',county:'Greater Manchester',desc:'North West England\'s flagship Premiership club. The Sharks play at AJ Bell Stadium with a fiercely loyal Greater Manchester fanbase and a strong tradition in English rugby.',website:'https://www.salesharks.com',logo:'badges/sale-sharks.jpg',featured:true,rating:'4.3',phone:'+44 161 283 1861',email:'',address:'AJ Bell Stadium, Salford M5 5LJ',lat:'53.4872',lng:'-2.2913',slug:'sale-sharks'},
   {id:10,name:'Newcastle Falcons',type:'union',country:'England',region:'north-east',city:'Newcastle',county:'Tyne and Wear',desc:'The North East\'s professional rugby union club at Kingston Park. The Falcons have been champions and consistent performers, bringing top-level rugby to the passionate North East rugby community.',website:'https://www.newcastle-falcons.co.uk',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Newcastle_Falcons_badge.svg/150px-Newcastle_Falcons_badge.svg.png',featured:true,rating:'4.2',phone:'+44 191 214 5588',email:'',address:'Kingston Park, Newcastle NE13 8AF',lat:'55.0427',lng:'-1.6983',slug:'newcastle-falcons'},
-  {id:11,name:'Cardiff RFC',type:'union',country:'Wales',region:'wales',city:'Cardiff',county:'South Glamorgan',desc:'One of the oldest and most famous rugby clubs in the world. The Cardiff Blue and Blacks have played at Cardiff Arms Park since 1876, beating the All Blacks in 1953.',website:'https://www.cardiffrfc.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/4/42/Cardiff_RFC_logo.svg/150px-Cardiff_RFC_logo.svg.png',featured:true,rating:'4.4',phone:'+44 29 2082 6000',email:'',address:'Cardiff Arms Park, Cardiff CF10 1JA',lat:'51.4782',lng:'-3.1832',slug:'cardiff-rfc'},
-  {id:12,name:'Edinburgh Rugby',type:'union',country:'Scotland',region:'scotland',city:'Edinburgh',county:'Lothian',desc:'Professional rugby union club representing Edinburgh and the Scottish Borders. Play at Murrayfield Stadium with a rich history in the URC (United Rugby Championship).',website:'https://www.edinburghrugby.org',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Edinburgh_Rugby_logo.svg/150px-Edinburgh_Rugby_logo.svg.png',featured:true,rating:'4.3',phone:'+44 131 346 5000',email:'',address:'Scottish Gas Murrayfield Stadium, Edinburgh EH12 5PJ',lat:'55.9466',lng:'-3.2415',slug:'edinburgh-rugby'},
-  {id:13,name:'Glasgow Warriors',type:'union',country:'Scotland',region:'scotland',city:'Glasgow',county:'Lanarkshire',desc:'Professional rugby club at Scotstoun Stadium. The Warriors are one of the most successful clubs in Pro14/URC history with passionate support across Glasgow and the West of Scotland.',website:'https://www.glasgowwarriors.org',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/5b/Glasgow_Warriors_logo.svg/150px-Glasgow_Warriors_logo.svg.png',featured:true,rating:'4.4',phone:'+44 141 959 5555',email:'',address:'Scotstoun Stadium, 72 Danes Dr, Glasgow G14 9HD',lat:'55.8751',lng:'-4.3501',slug:'glasgow-warriors'},
+  {id:11,name:'Cardiff RFC',type:'union',country:'Wales',region:'wales',city:'Cardiff',county:'South Glamorgan',desc:'One of the oldest and most famous rugby clubs in the world. The Cardiff Blue and Blacks have played at Cardiff Arms Park since 1876, beating the All Blacks in 1953.',website:'https://www.cardiffrfc.com',logo:'badges/cardiff-blues.jpg',featured:true,rating:'4.4',phone:'+44 29 2082 6000',email:'',address:'Cardiff Arms Park, Cardiff CF10 1JA',lat:'51.4782',lng:'-3.1832',slug:'cardiff-rfc'},
+  {id:12,name:'Edinburgh Rugby',type:'union',country:'Scotland',region:'scotland',city:'Edinburgh',county:'Lothian',desc:'Professional rugby union club representing Edinburgh and the Scottish Borders. Play at Murrayfield Stadium with a rich history in the URC (United Rugby Championship).',website:'https://www.edinburghrugby.org',logo:'badges/edinburgh-rugby.gif',featured:true,rating:'4.3',phone:'+44 131 346 5000',email:'',address:'Scottish Gas Murrayfield Stadium, Edinburgh EH12 5PJ',lat:'55.9466',lng:'-3.2415',slug:'edinburgh-rugby'},
+  {id:13,name:'Glasgow Warriors',type:'union',country:'Scotland',region:'scotland',city:'Glasgow',county:'Lanarkshire',desc:'Professional rugby club at Scotstoun Stadium. The Warriors are one of the most successful clubs in Pro14/URC history with passionate support across Glasgow and the West of Scotland.',website:'https://www.glasgowwarriors.org',logo:'badges/glasgow-warriors.jpg',featured:true,rating:'4.4',phone:'+44 141 959 5555',email:'',address:'Scotstoun Stadium, 72 Danes Dr, Glasgow G14 9HD',lat:'55.8751',lng:'-4.3501',slug:'glasgow-warriors'},
   // League
   {id:50,name:'Leeds Rhinos',type:'league',country:'England',region:'yorkshire',city:'Leeds',county:'West Yorkshire',desc:'The most successful Super League club of the modern era. Eight Grand Final wins, multiple Challenge Cup victories, and home of legends Kevin Sinfield and Rob Burrow. Based at Headingley Stadium.',website:'https://www.leedsrhinos.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Leeds_Rhinos_badge.svg/150px-Leeds_Rhinos_badge.svg.png',featured:true,rating:'4.5',phone:'+44 113 278 6181',email:'',address:'Headingley Stadium, Leeds LS6 3BR',lat:'53.8194',lng:'-1.5797',slug:'leeds-rhinos',founded:'1890',colours:'Blue & Amber',league:'Betfred Super League',teams:'Senior XIII,Women,Under 19,Under 16,Under 14',honours:'8× Super League Champions, 3× World Club Champions, 8× Challenge Cup'},
-  {id:51,name:'Wigan Warriors',type:'league',country:'England',region:'north-west',city:'Wigan',county:'Greater Manchester',desc:'The most decorated club in rugby league history. Record Challenge Cup wins and multiple championship titles spanning over a century of rugby league greatness at the DW Stadium.',website:'https://www.wiganwarriors.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/3/38/Wigan_Warriors_Badge_2019.svg/150px-Wigan_Warriors_Badge_2019.svg.png',featured:true,rating:'4.6',phone:'+44 1942 774000',email:'',address:'DW Stadium, Loire Drive, Wigan WN5 0UZ',lat:'53.5509',lng:'-2.6349',slug:'wigan-warriors'},
+  {id:51,name:'Wigan Warriors',type:'league',country:'England',region:'north-west',city:'Wigan',county:'Greater Manchester',desc:'The most decorated club in rugby league history. Record Challenge Cup wins and multiple championship titles spanning over a century of rugby league greatness at the DW Stadium.',website:'https://www.wiganwarriors.com',logo:'badges/wigan-warriors.jpg',featured:true,rating:'4.6',phone:'+44 1942 774000',email:'',address:'DW Stadium, Loire Drive, Wigan WN5 0UZ',lat:'53.5509',lng:'-2.6349',slug:'wigan-warriors'},
   {id:52,name:'St Helens RFC',type:'league',country:'England',region:'north-west',city:'St Helens',county:'Merseyside',desc:'Consecutive Super League champions and one of the most successful clubs in rugby league history. Playing at the Totally Wicked Stadium with a passionate and loyal fanbase.',website:'https://www.saintsrlfc.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/c/ca/St_Helens_RFC_badge.svg/150px-St_Helens_RFC_badge.svg.png',featured:true,rating:'4.6',phone:'+44 1744 455052',email:'',address:'Totally Wicked Stadium, St Helens WA9 3AL',lat:'53.4427',lng:'-2.7463',slug:'st-helens-rfc'},
-  {id:53,name:'Warrington Wolves',type:'league',country:'England',region:'north-west',city:'Warrington',county:'Cheshire',desc:'Historic Super League club at the Halliwell Jones Stadium. Multiple Challenge Cup winners with an impressive squad and an ambitious vision for the future of Warrington rugby league.',website:'https://www.warringtonwolves.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Warrington_Wolves_badge.svg/150px-Warrington_Wolves_badge.svg.png',featured:true,rating:'4.4',phone:'+44 1925 248888',email:'',address:'Halliwell Jones Stadium, Warrington WA2 7NE',lat:'53.4045',lng:'-2.5551',slug:'warrington-wolves'},
+  {id:53,name:'Warrington Wolves',type:'league',country:'England',region:'north-west',city:'Warrington',county:'Cheshire',desc:'Historic Super League club at the Halliwell Jones Stadium. Multiple Challenge Cup winners with an impressive squad and an ambitious vision for the future of Warrington rugby league.',website:'https://www.warringtonwolves.com',logo:'badges/warrington-wolves.png',featured:true,rating:'4.4',phone:'+44 1925 248888',email:'',address:'Halliwell Jones Stadium, Warrington WA2 7NE',lat:'53.4045',lng:'-2.5551',slug:'warrington-wolves'},
   {id:54,name:'Castleford Tigers',type:'league',country:'England',region:'yorkshire',city:'Castleford',county:'West Yorkshire',desc:'West Yorkshire Super League club with a passionate local fanbase. The Tigers have been consistent performers at the top level and are known for their exciting fast-paced style of play.',website:'https://www.castlefordtigers.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Castleford_Tigers.svg/150px-Castleford_Tigers.svg.png',featured:true,rating:'4.4',phone:'+44 1977 552674',email:'',address:'The Jungle, Wheldon Road, Castleford WF10 2SD',lat:'53.7250',lng:'-1.3510',slug:'castleford-tigers'},
   // Businesses
   {id:100,name:'England Rugby (RFU)',type:'business',country:'England',region:'london',city:'Twickenham',county:'Greater London',desc:'The official Rugby Football Union governing body for rugby union in England. Responsible for community and elite rugby development, including the England national team at Twickenham Stadium.',website:'https://www.englandrugby.com',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/England_rugby_union_badge.svg/150px-England_rugby_union_badge.svg.png',featured:true,rating:'',phone:'+44 208 892 2000',email:'',address:'Twickenham Stadium, 200 Whitton Road, Twickenham TW2 7BA',lat:'51.4559',lng:'-0.3415',slug:'england-rugby-rfu'},
@@ -169,12 +169,12 @@ window.addEventListener('load',()=>setTimeout(renderMyClubsBar,500));
 //  VIBE TAGS — Community rating tags per club
 // ════════════════════════════════════════════════════════════════
 const DEFAULT_VIBES = [
-  {id:'atmos',label:'Great Atmosphere',icon:'🔥'},
-  {id:'family',label:'Family Club',icon:'👨‍👩‍👧'},
-  {id:'juniors',label:'Strong Juniors',icon:'⭐'},
-  {id:'food',label:'Best Post-Match Food',icon:'🍺'},
-  {id:'welcome',label:'Very Welcoming',icon:'👋'},
-  {id:'women',label:'Active Women\'s Section',icon:'💪'},
+  {id:'atmos', label:'Great Atmosphere', icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'},
+  {id:'family', label:'Family Club', icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>'},
+  {id:'juniors', label:'Strong Juniors', icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'},
+  {id:'food', label:'Best Post-Match Food', icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>'},
+  {id:'welcome', label:'Very Welcoming', icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>'},
+  {id:'women', label:"Active Women's Section", icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M8 18h8"/></svg>'},
 ];
 
 function getVibes(slug){
@@ -192,7 +192,7 @@ function renderVibeTags(slug){
   const v=getVibes(slug);
   el.innerHTML=DEFAULT_VIBES.map(vb=>`
     <button class="vibe-tag${v[vb.id]?' voted':''}" onclick="voteVibe('${slug}','${vb.id}')">
-      ${vb.icon} ${vb.label}
+      <span class="vt-ico">${vb.icon}</span> ${vb.label}
     </button>`).join('');
 }
 
@@ -288,6 +288,92 @@ function toggleMapView(view){
     if(mapEl){ mapEl.classList.remove('active'); if(mapInstance){mapInstance.remove();mapInstance=null;} }
   }
 }
+
+// ════════════════════════════════════════════════════════════════
+//  WEEKLY RESULTS AGENT
+//  Fetches latest rugby results from BBC Sport & Sky Sports RSS
+//  Runs on page load, caches for 6 hours, updates Results sections
+// ════════════════════════════════════════════════════════════════
+const RESULTS_CACHE_KEY = 'ukrc_results_v2';
+const RESULTS_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+const RUGBY_FEEDS = {
+  union: [
+    { name: 'BBC Sport — Rugby Union', url: 'https://feeds.bbci.co.uk/sport/rugby-union/rss.xml', source: 'BBC' },
+    { name: 'Premiership Rugby', url: 'https://www.premiershiprugby.com/news/rss', source: 'Prem' },
+  ],
+  league: [
+    { name: 'BBC Sport — Rugby League', url: 'https://feeds.bbci.co.uk/sport/rugby-league/rss.xml', source: 'BBC' },
+    { name: 'Super League', url: 'https://www.superleague.co.uk/rss/news/', source: 'SL' },
+  ]
+};
+
+async function fetchResultsFeed(type) {
+  // Check cache first
+  try {
+    const cached = JSON.parse(localStorage.getItem(RESULTS_CACHE_KEY + '_' + type) || 'null');
+    if (cached && (Date.now() - cached.ts < RESULTS_TTL)) {
+      return cached.items;
+    }
+  } catch(e) {}
+
+  // Fetch via CORS proxy (AllOrigins)
+  const feeds = RUGBY_FEEDS[type] || RUGBY_FEEDS.union;
+  const allItems = [];
+
+  for (const feed of feeds.slice(0, 1)) { // 1 feed per type to avoid rate limits
+    try {
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
+      if (!res.ok) continue;
+      const json = await res.json();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(json.contents, 'text/xml');
+      const items = [...xml.querySelectorAll('item')].slice(0, 6).map(item => ({
+        title: item.querySelector('title')?.textContent || '',
+        link:  item.querySelector('link')?.textContent || '#',
+        date:  item.querySelector('pubDate')?.textContent || '',
+        source: feed.source
+      }));
+      allItems.push(...items);
+    } catch(e) { /* fetch failed silently */ }
+  }
+
+  if (allItems.length) {
+    try {
+      localStorage.setItem(RESULTS_CACHE_KEY + '_' + type, JSON.stringify({ts: Date.now(), items: allItems}));
+    } catch(e) {}
+  }
+
+  return allItems;
+}
+
+async function renderResultsInProfile(slug, type) {
+  const el = document.getElementById('results-feed-' + slug);
+  if (!el) return;
+
+  el.innerHTML = '<div style="text-align:center;padding:12px;color:var(--grey);font-size:.8rem">Loading latest results...</div>';
+
+  const items = await fetchResultsFeed(type);
+
+  if (!items.length) {
+    el.innerHTML = '<div style="font-size:.78rem;color:var(--grey);text-align:center;padding:8px">Could not load live results. Check the links above.</div>';
+    return;
+  }
+
+  el.innerHTML = items.map(item => {
+    const d = item.date ? new Date(item.date).toLocaleDateString('en-GB', {day:'numeric',month:'short'}) : '';
+    return `<a href="${item.link}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--gl);text-decoration:none;">
+      <div style="flex-shrink:0;background:var(--navy);color:#fff;font-size:.6rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:1px">${item.source}</div>
+      <div style="flex:1">
+        <div style="font-size:.81rem;color:var(--navy);font-weight:500;line-height:1.4">${item.title}</div>
+        ${d?`<div style="font-size:.71rem;color:var(--grey);margin-top:2px">${d}</div>`:''}
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--grey)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:3px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>`;
+  }).join('') + `<div style="font-size:.7rem;color:var(--grey);margin-top:8px;text-align:right">Updated every 6 hours · Source: BBC Sport</div>`;
+}
+
 const COUNTIES = {
   'yorkshire':          {name:'Yorkshire',region:'yorkshire',country:'England'},
   'surrey':             {name:'Surrey',region:'london',country:'England'},
@@ -713,31 +799,8 @@ function renderClubPage(slug) {
             ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600;font-size:.9rem">Visit official website →</a>`:''}
           </div>
 
-          <!-- ── HIGH IMPACT: TRAINING SCHEDULE ───────── -->
-          <div class="y-card">
-            <h2 class="y-card-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Training & Match Days
-            </h2>
-            ${c.training ? `
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
-              ${c.training.split(',').map(s=>s.trim()).filter(Boolean).map(s=>`
-              <div style="background:var(--off);border-radius:9px;padding:12px 14px;border:1px solid var(--gl)">
-                <div style="font-size:.72rem;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Session</div>
-                <div style="font-size:.88rem;font-weight:600;color:var(--navy)">${s}</div>
-              </div>`).join('')}
-            </div>` : `
-            <div style="background:var(--off);border-radius:9px;padding:14px 16px;border:1px dashed var(--gl);text-align:center">
-              <div style="font-size:.83rem;color:var(--grey);margin-bottom:6px">Training times not yet listed</div>
-              <a onclick="go('register')" style="font-size:.78rem;color:var(--red);font-weight:600;cursor:pointer">Are you the club secretary? Add training times free →</a>
-            </div>`}
-            <div style="background:#e8f4e8;border-radius:9px;padding:11px 14px;border:1px solid #c3e6cb;display:flex;align-items:center;gap:9px;margin-top:${c.training?'0':'10px'}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
-              <div style="font-size:.78rem;color:#166534;font-weight:600">Most clubs welcome new players — contact the club before your first visit</div>
-            </div>
-          </div>
+          <!-- ── TEAMS & AGE GROUPS ──────── -->
 
-          <!-- ── HIGH IMPACT: TEAMS & AGE GROUPS ──────── -->
           <div class="y-card">
             <h2 class="y-card-title">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
@@ -769,27 +832,63 @@ function renderClubPage(slug) {
             </div>
           </div>
 
-          <!-- ── MEDIUM IMPACT: HONOURS & HISTORY ─────── -->
+          <!-- ── HISTORY & HONOURS ─────────────────────── -->
           <div class="y-card">
             <h2 class="y-card-title">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:6px"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
               History & Honours
             </h2>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
-              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
-                <div style="font-size:1.4rem;font-weight:700;color:var(--navy);line-height:1">${c.founded||'—'}</div>
-                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Founded</div>
+
+            <!-- Key Stats Row -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+              <div style="text-align:center;background:var(--navy);border-radius:10px;padding:14px 6px">
+                <div style="font-size:1.35rem;font-weight:700;color:var(--gold);line-height:1;font-family:var(--fd)">${c.founded||'N/A'}</div>
+                <div style="font-size:.62rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.5px;margin-top:4px">Founded</div>
               </div>
-              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
-                <div style="font-size:.82rem;font-weight:700;color:var(--navy);line-height:1.3">${c.colours||'—'}</div>
-                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Club Colours</div>
+              <div style="text-align:center;background:var(--off);border-radius:10px;padding:14px 6px;border:1px solid var(--gl)">
+                <div style="font-size:.78rem;font-weight:700;color:var(--navy);line-height:1.3">${c.colours||'See website'}</div>
+                <div style="font-size:.62rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:4px">Kit Colours</div>
               </div>
-              <div style="text-align:center;background:var(--off);border-radius:8px;padding:12px 8px;border:1px solid var(--gl)">
-                <div style="font-size:.82rem;font-weight:700;color:var(--navy);line-height:1.3">${c.league||tl}</div>
-                <div style="font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Plays in</div>
+              <div style="text-align:center;background:var(--off);border-radius:10px;padding:14px 6px;border:1px solid var(--gl)">
+                <div style="font-size:.78rem;font-weight:700;color:var(--navy);line-height:1.3">${tc==='union'?nation+' Rugby':'Rugby League'}</div>
+                <div style="font-size:.62rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:4px">Governing Body</div>
+              </div>
+              <div style="text-align:center;background:var(--off);border-radius:10px;padding:14px 6px;border:1px solid var(--gl)">
+                <div style="font-size:.78rem;font-weight:700;color:var(--navy);line-height:1.3">${c.league||tl}</div>
+                <div style="font-size:.62rem;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;margin-top:4px">Current League</div>
               </div>
             </div>
-            ${c.honours?`<div style="font-size:.84rem;color:var(--gd);line-height:1.7"><strong style="color:var(--navy)">Honours:</strong> ${c.honours}</div>`:''}
+
+            <!-- Club History Narrative -->
+            <div style="background:var(--off);border-radius:10px;padding:14px 16px;border-left:3px solid var(--red);margin-bottom:14px">
+              <div style="font-size:.72rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Club History</div>
+              <p style="font-size:.86rem;color:var(--gd);line-height:1.75;margin:0">
+                ${c.founded
+                  ? `${c.name} was founded in ${c.founded} and has been a pillar of ${tc==='union'?'rugby union':'rugby league'} in ${c.city||c.county||c.country} for over ${new Date().getFullYear()-parseInt(c.founded)} years. ${c.colours?`The club plays in ${c.colours}.`:''} ${c.league?`Currently competing in the ${c.league}.`:''} ${c.desc}`
+                  : c.desc}
+              </p>
+            </div>
+
+            <!-- Honours List -->
+            ${c.honours ? `
+            <div style="margin-bottom:0">
+              <div style="font-size:.72rem;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                Honours & Achievements
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                ${c.honours.split(',').map(h=>h.trim()).filter(Boolean).map(h=>`
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border:1px solid var(--gl);border-radius:8px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span style="font-size:.84rem;color:var(--navy);font-weight:500">${h}</span>
+                </div>`).join('')}
+              </div>
+            </div>` : `
+            <div style="text-align:center;padding:16px;background:var(--off);border-radius:8px;border:1px dashed var(--gl)">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gl)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 8px"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              <div style="font-size:.8rem;color:var(--grey);margin-bottom:6px">Honours not yet listed for this club</div>
+              <a onclick="go('register')" style="font-size:.75rem;color:var(--red);font-weight:600;cursor:pointer">Own this club? Add your honours →</a>
+            </div>`}
           </div>
 
           <!-- ── MEDIUM IMPACT: MEMBERSHIP & HOW TO JOIN ─ -->
@@ -889,6 +988,8 @@ function renderClubPage(slug) {
               </a>`:''}
               <div style="font-size:.75rem;color:var(--grey);padding:4px 0">Live results and league tables are managed by the relevant governing body. Visit the links above to find ${c.name} fixtures and results.</div>
             </div>
+            <!-- Live results feed -->
+            <div id="results-feed-${c.slug}" style="margin-top:12px"></div>
           </div>`:''}
 
           <!-- Nearby Clubs -->
@@ -1067,6 +1168,8 @@ function renderClubPage(slug) {
   renderVibeTags(c.slug);
   // Re-render MyClubs bar
   renderMyClubsBar();
+  // Load live results feed
+  setTimeout(() => renderResultsInProfile(c.slug, c.type), 300);
 }
 
 function submitClaim(slug, clubName) {
