@@ -125,7 +125,7 @@ const STATIC_PAGES = {
 
   '/?p=about': {
     title:    'About UK Rugby Club Directory | Free Rugby Club Listings UK',
-    desc:     'The UK's most comprehensive free rugby club directory with 773+ club profiles across England, Scotland, Wales and Northern Ireland. Independent, free and unaffiliated with any governing body.',
+    desc:     "The UK's most comprehensive free rugby club directory with 773+ club profiles across England, Scotland, Wales and Northern Ireland. Independent, free and unaffiliated with any governing body.",
     keywords: 'about UK rugby club directory, rugby club directory UK, free rugby club listings, rugby directory editorial policy',
     robots:   'index, follow',
     ogType:   'website',
