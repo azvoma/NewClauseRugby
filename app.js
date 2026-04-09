@@ -128,6 +128,166 @@ function distHtml(c) {
 // Trigger geolocation on page load
 window.addEventListener('load', () => { setTimeout(getUserLocation, 1000); });
 
+
+// ════════════════════════════════════════════════════════════════
+//  MY CLUBS — Follow / Save clubs (localStorage)
+// ════════════════════════════════════════════════════════════════
+function getMyClubs(){try{return JSON.parse(localStorage.getItem('ukrc_myclubs')||'[]');}catch(e){return[];}}
+function saveMyClubs(arr){try{localStorage.setItem('ukrc_myclubs',JSON.stringify(arr));}catch(e){}}
+function isFollowing(slug){return getMyClubs().includes(slug);}
+function toggleFollow(slug,name){
+  let clubs=getMyClubs();
+  if(clubs.includes(slug)){clubs=clubs.filter(s=>s!==slug);}
+  else{clubs.push(slug);}
+  saveMyClubs(clubs);
+  // Update all follow buttons for this club
+  document.querySelectorAll(`.follow-btn[data-slug="${slug}"]`).forEach(btn=>{
+    const f=clubs.includes(slug);
+    btn.classList.toggle('following',f);
+    btn.innerHTML=f
+      ?`<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Following`
+      :`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Follow`;
+  });
+  renderMyClubsBar();
+}
+function renderMyClubsBar(){
+  const bar=document.getElementById('my-clubs-bar');
+  if(!bar) return;
+  const clubs=getMyClubs();
+  if(!clubs.length){bar.classList.remove('show');return;}
+  bar.classList.add('show');
+  const chips=clubs.map(slug=>{
+    const c=slugMap[slug]; if(!c) return '';
+    return `<span class="mc-chip" onclick="go('club/${slug}')">${c.logo?`<img src="${c.logo}" width="16" height="16" style="border-radius:3px;object-fit:contain">`:''} ${c.name}</span>`;
+  }).join('');
+  document.getElementById('mc-chips').innerHTML=chips;
+}
+window.addEventListener('load',()=>setTimeout(renderMyClubsBar,500));
+
+
+// ════════════════════════════════════════════════════════════════
+//  VIBE TAGS — Community rating tags per club
+// ════════════════════════════════════════════════════════════════
+const DEFAULT_VIBES = [
+  {id:'atmos',label:'Great Atmosphere',icon:'🔥'},
+  {id:'family',label:'Family Club',icon:'👨‍👩‍👧'},
+  {id:'juniors',label:'Strong Juniors',icon:'⭐'},
+  {id:'food',label:'Best Post-Match Food',icon:'🍺'},
+  {id:'welcome',label:'Very Welcoming',icon:'👋'},
+  {id:'women',label:'Active Women\'s Section',icon:'💪'},
+];
+
+function getVibes(slug){
+  try{return JSON.parse(localStorage.getItem('ukrc_vibes_'+slug)||'{}');}catch(e){return{};}
+}
+function voteVibe(slug,id){
+  const v=getVibes(slug);
+  if(v[id]) delete v[id]; else v[id]=1;
+  try{localStorage.setItem('ukrc_vibes_'+slug,JSON.stringify(v));}catch(e){}
+  renderVibeTags(slug);
+}
+function renderVibeTags(slug){
+  const el=document.getElementById('vibe-tags-'+slug);
+  if(!el) return;
+  const v=getVibes(slug);
+  el.innerHTML=DEFAULT_VIBES.map(vb=>`
+    <button class="vibe-tag${v[vb.id]?' voted':''}" onclick="voteVibe('${slug}','${vb.id}')">
+      ${vb.icon} ${vb.label}
+    </button>`).join('');
+}
+
+
+// ════════════════════════════════════════════════════════════════
+//  DISTANCE SORT for listing pages
+// ════════════════════════════════════════════════════════════════
+let distSortActive = false;
+function toggleDistSort(btn){
+  distSortActive = !distSortActive;
+  btn.classList.toggle('active', distSortActive);
+  btn.innerHTML = distSortActive
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Nearest First ✓'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Nearest First';
+  if(distSortActive && !userLat){
+    getUserLocation();
+    setTimeout(()=>renderDir('union'), 1500);
+  } else {
+    renderDir('union');
+  }
+}
+
+// Patch renderDir to sort by distance when active
+const _origRenderDir = renderDir;
+
+// ════════════════════════════════════════════════════════════════
+//  MAP VIEW — Leaflet-based interactive club map
+// ════════════════════════════════════════════════════════════════
+let mapInstance = null;
+let mapMarkers = [];
+
+function initMapView(clubs){
+  const container = document.getElementById('dir-map');
+  if(!container) return;
+
+  // Load Leaflet dynamically
+  if(!window.L){
+    const css = document.createElement('link');
+    css.rel='stylesheet'; css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+    document.head.appendChild(css);
+    const s = document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    s.onload=()=>buildMap(clubs,container);
+    document.head.appendChild(s);
+  } else {
+    buildMap(clubs, container);
+  }
+}
+
+function buildMap(clubs, container){
+  // Clear old map
+  if(mapInstance){ mapInstance.remove(); mapInstance=null; }
+  mapMarkers=[];
+
+  mapInstance = L.map(container).setView([54.5,-3],6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap contributors',maxZoom:18
+  }).addTo(mapInstance);
+
+  clubs.filter(c=>c.lat&&c.lng).forEach(c=>{
+    const icon = L.divIcon({
+      html: c.logo
+        ? `<div style="width:40px;height:40px;border-radius:50%;background:#fff;border:3px solid #c8102e;box-shadow:0 2px 8px rgba(0,0,0,.25);overflow:hidden;display:flex;align-items:center;justify-content:center"><img src="${c.logo}" width="32" height="32" style="object-fit:contain" onerror="this.parentElement.innerHTML='🏉'"></div>`
+        : `<div style="width:36px;height:36px;border-radius:50%;background:#0a1628;border:3px solid #c8102e;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:16px">🏉</div>`,
+      className:'',iconSize:[40,40],iconAnchor:[20,20]
+    });
+    const marker = L.marker([parseFloat(c.lat),parseFloat(c.lng)],{icon})
+      .addTo(mapInstance)
+      .bindPopup(`<div style="min-width:180px">
+        ${c.logo?`<img src="${c.logo}" width="48" height="48" style="object-fit:contain;display:block;margin:0 auto 8px;border-radius:6px">` : ''}
+        <div style="font-family:Oswald,sans-serif;font-size:.9rem;font-weight:700;color:#0a1628;text-transform:uppercase;margin-bottom:4px">${c.name}</div>
+        <div style="font-size:.78rem;color:#7a8c9e;margin-bottom:8px">${[c.city,c.county].filter(Boolean).join(', ')}</div>
+        <button onclick="go('club/${c.slug}')" style="background:#c8102e;color:#fff;border:none;padding:6px 12px;border-radius:5px;font-size:.78rem;font-weight:600;cursor:pointer;width:100%">View Profile →</button>
+      </div>`,{maxWidth:220});
+    mapMarkers.push(marker);
+  });
+}
+
+function toggleMapView(view){
+  const listEl = document.getElementById('u-list');
+  const pagEl  = document.getElementById('u-pag');
+  const mapEl  = document.getElementById('map-view-container');
+  document.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.vt-btn[data-view="${view}"]`)?.classList.add('active');
+
+  if(view==='map'){
+    if(listEl) listEl.style.display='none';
+    if(pagEl)  pagEl.style.display='none';
+    if(mapEl){ mapEl.classList.add('active'); initMapView(S['union'].list); }
+  } else {
+    if(listEl) listEl.style.display='';
+    if(pagEl)  pagEl.style.display='';
+    if(mapEl){ mapEl.classList.remove('active'); if(mapInstance){mapInstance.remove();mapInstance=null;} }
+  }
+}
 const COUNTIES = {
   'yorkshire':          {name:'Yorkshire',region:'yorkshire',country:'England'},
   'surrey':             {name:'Surrey',region:'london',country:'England'},
@@ -511,11 +671,22 @@ function renderClubPage(slug) {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
             ${c.address||fullLoc}
           </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+            ${(()=>{
+              const lv=c.league||'';
+              const lvClass=lv.toLowerCase().includes('premiership')||lv.toLowerCase().includes('super league')?'level-prem':lv.toLowerCase().includes('national 1')||lv.toLowerCase().includes('championship')?'level-nat1':lv.toLowerCase().includes('regional')||lv.toLowerCase().includes('division')?'level-regional':'level-county';
+              return lv?`<span class="level-badge ${lvClass}">${lv}</span>`:'';
+            })()}
+          </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             ${c.website&&c.website.startsWith('http')?`<a href="${c.website}" target="_blank" rel="noopener" class="y-btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Visit Website</a>`:''}
             ${c.phone?`<a href="tel:${c.phone}" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .89h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg> ${c.phone}</a>`:''}
             ${c.phone?`<a href="https://wa.me/${c.phone.replace(/[^0-9]/g,'')}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:#fff;padding:8px 14px;border-radius:7px;font-size:.85rem;font-weight:600;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> WhatsApp</a>`:''}
             <a href="${dirUrl}" target="_blank" rel="noopener" class="y-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Get Directions</a>
+            <button class="follow-btn${isFollowing(c.slug)?' following':''}" data-slug="${c.slug}" onclick="event.stopPropagation();toggleFollow('${c.slug}','${c.name.replace(/'/g,"\'")}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="${isFollowing(c.slug)?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              ${isFollowing(c.slug)?'Following':'Follow'}
+            </button>
           </div>
         </div>
       </div>
@@ -817,6 +988,44 @@ function renderClubPage(slug) {
             </div>
           </div>
 
+          <!-- Shop + Social links -->
+          ${(()=>{
+            const items=[];
+            if(c.website&&c.website.startsWith('http')) items.push(`<a href="${c.website}/shop" target="_blank" rel="noopener" class="shop-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Club Shop & Kit</a>`);
+            return items.length?`<div class="y-card">${items.join('')}<div style="font-size:.72rem;color:var(--grey);margin-top:4px;text-align:center">Link opens club website shop</div></div>`:'';
+          })()}
+
+          <!-- Amenities quick-view -->
+          <div class="y-card">
+            <h3 class="y-sidebar-title">Amenities</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div class="amenity-badge ${c.facilities&&c.facilities.toLowerCase().includes('bar')?'yes':'no'}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                Bar
+              </div>
+              <div class="amenity-badge ${c.facilities&&c.facilities.toLowerCase().includes('parking')?'yes':'no'}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                Parking
+              </div>
+              <div class="amenity-badge ${c.facilities&&(c.facilities.toLowerCase().includes('changing')||c.facilities.toLowerCase().includes('clubhouse'))?'yes':'no'}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                Clubhouse
+              </div>
+              <div class="amenity-badge ${c.facilities&&c.facilities.toLowerCase().includes('famil')?'yes':'no'}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Family
+              </div>
+            </div>
+            ${c.facilities?`<p style="font-size:.74rem;color:var(--grey);margin-top:8px;line-height:1.5">${c.facilities.slice(0,100)}${c.facilities.length>100?'…':''}</p>`:''}
+          </div>
+
+          <!-- Vibe Tags -->
+          <div class="y-card">
+            <h3 class="y-sidebar-title">Club Vibes</h3>
+            <p style="font-size:.74rem;color:var(--grey);margin-bottom:10px">Tap to add your experience</p>
+            <div class="vibe-tags" id="vibe-tags-${c.slug}"></div>
+          </div>
+
           <!-- Claim this listing — Item 6 -->
           <div class="y-card claim-card" id="claim-${c.slug}">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -854,6 +1063,10 @@ function renderClubPage(slug) {
   </div>`;
 
   document.getElementById('pg-club').innerHTML = html;
+  // Init vibe tags after render
+  renderVibeTags(c.slug);
+  // Re-render MyClubs bar
+  renderMyClubsBar();
 }
 
 function submitClaim(slug, clubName) {
@@ -1052,6 +1265,14 @@ function initDir(type,country,region,q) {
 }
 
 function renderDir(type) {
+  // Sort by distance if active
+  if(distSortActive && userLat && userLng){
+    S[type].list.sort((a,b)=>{
+      const da=a.lat&&a.lng?haversine(userLat,userLng,parseFloat(a.lat),parseFloat(a.lng)):9999;
+      const db=b.lat&&b.lng?haversine(userLat,userLng,parseFloat(b.lat),parseFloat(b.lng)):9999;
+      return da-db;
+    });
+  }
   const st=S[type]; const slice=st.list.slice((st.page-1)*PER,st.page*PER);
   const pfx=type==='union'?'u':'l';
   const listEl=document.getElementById(pfx+'-list'); const pagEl=document.getElementById(pfx+'-pag');
