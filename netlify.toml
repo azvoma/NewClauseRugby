@@ -13,17 +13,19 @@
   path     = "/*"
 
 # ── Legacy .html URL cleanup (301 permanent) ────────────────────
-# Bing flagged /club/saracens.html, /club/exeter-chiefs-women.html etc.
-# as duplicate titles. These 301s collapse them to canonical clean paths.
+# Bing flagged /club/saracens.html etc. as duplicate titles.
+# 301s collapse them to canonical clean paths.
 [[redirects]]
   from   = "/club/:slug.html"
   to     = "/club/:slug"
   status = 301
+  force  = true
 
 [[redirects]]
   from   = "/:page.html"
   to     = "/:page"
   status = 301
+  force  = true
 
 # ── Path-based URL redirects (Item 7) ──────────────────────────
 # These clean URLs allow future migration away from hash routing
@@ -41,7 +43,7 @@
   to     = "/?p=region/:name"
   status = 200
 
-# County pages: /county/yorkshire → SPA with ?p=county/yorkshire  
+# County pages: /county/yorkshire → SPA with ?p=county/yorkshire
 [[redirects]]
   from   = "/county/:name"
   to     = "/?p=county/:name"

@@ -358,7 +358,22 @@ ${seo.icbm      ? `<meta name="ICBM" content="${e(seo.icbm)}">` : ''}
 export default async function handler(request, context) {
   const url    = new URL(request.url);
   const path   = url.pathname.replace(/\/$/, '') || '/';
-  const pParam = url.searchParams.get('p') || '';
+
+  // Edge functions run BEFORE Netlify redirect rules, so clean-path URLs like
+  // /club/leicester-tigers arrive here with no ?p= param yet.  We derive pParam
+  // from the pathname so every route gets the correct SEO injection.
+  let pParam = url.searchParams.get('p') || '';
+  if (!pParam) {
+    const stripped = path.replace(/^\//, ''); // remove leading slash
+    if (stripped.startsWith('club/'))         pParam = stripped;
+    else if (stripped.startsWith('region/'))  pParam = stripped;
+    else if (stripped.startsWith('county/'))  pParam = stripped;
+    else if ([
+      'rugby-union','rugby-league','businesses',
+      'about','contact','register',
+      'privacy','terms','cookie-policy'
+    ].includes(stripped))                      pParam = stripped;
+  }
 
   // Item 7: Also resolve clean path URLs like /club/leicester-tigers
   // These come via Netlify redirect rules (200 rewrites to ?p=)
@@ -380,20 +395,41 @@ export default async function handler(request, context) {
       title:    `Rugby Club | UK Rugby Club Directory`,
       desc:     'Find this rugby club on the UK Rugby Club Directory. View contact details, location and club information.',
       keywords: 'rugby club, find a rugby club, rugby near me',
-      canonical: `${SITE}/?p=${pParam}`,
+      canonical: `${SITE}/club/${slug}`,
       robots:   'index, follow',
       ogType:   'website',
-      schema:   { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/?p=${pParam}` }
+      schema:   { '@context': 'https://schema.org', '@type': 'WebPage', url: `${SITE}/club/${slug}` }
     };
 
   // ── Route: region page ────────────────────────────────────
   } else if (pParam.startsWith('region/')) {
     const region = pParam.replace('region/', '');
-    seo = { ...regionSeo(region), canonical: `${SITE}/?p=${pParam}` };
+    seo = { ...regionSeo(region), canonical: `${SITE}/region/${region}` };
+
+  // ── Route: county page ────────────────────────────────────
+  } else if (pParam.startsWith('county/')) {
+    const county = pParam.replace('county/', '');
+    const countyName = county.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    seo = {
+      title:    `Rugby Clubs in ${countyName} | Find a Club Near You | UK Rugby Club Directory`,
+      desc:     `Find rugby clubs in ${countyName}. Browse rugby union and rugby league clubs with contact details, training times and directions. Join a club near you today.`,
+      keywords: `rugby clubs ${countyName}, rugby ${countyName}, rugby union ${countyName}, rugby league ${countyName}, find rugby club ${countyName}, rugby near me ${countyName}, ${countyName} rugby teams`,
+      robots:   'index, follow',
+      ogType:   'website',
+      canonical: `${SITE}/county/${county}`,
+      schema: {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        url: `${SITE}/county/${county}`,
+        name: `Rugby Clubs in ${countyName}`,
+        description: `Directory of rugby clubs in ${countyName}`
+      }
+    };
 
   // ── Route: static ?p= pages ───────────────────────────────
   } else if (pParam && STATIC_PAGES[`/?p=${pParam}`]) {
-    seo = { ...STATIC_PAGES[`/?p=${pParam}`], canonical: `${SITE}/?p=${pParam}` };
+    // Canonical uses the clean path URL (matches sitemap + Netlify redirect source)
+    seo = { ...STATIC_PAGES[`/?p=${pParam}`], canonical: `${SITE}/${pParam}` };
 
   // ── Route: homepage or unknown ────────────────────────────
   } else {
