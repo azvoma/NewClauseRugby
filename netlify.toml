@@ -12,6 +12,82 @@
   function = "seo"
   path     = "/*"
 
+# ── Hard 301 redirects for legacy .html URLs ────────────────
+# These prevent Bing/Google indexing duplicate .html versions
+[[redirects]]
+  from   = "/club/:slug.html"
+  to     = "/club/:slug"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/:page.html"
+  to     = "/:page"
+  status = 301
+  force  = true
+
+# ── 301 redirects from ?p= query URLs to clean paths ────────
+# Collapses duplicate URL versions into the canonical clean path
+[[redirects]]
+  from   = "/?p=rugby-union"
+  to     = "/rugby-union"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=rugby-league"
+  to     = "/rugby-league"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=businesses"
+  to     = "/businesses"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=about"
+  to     = "/about"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=contact"
+  to     = "/contact"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=register"
+  to     = "/register"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=club/:slug"
+  to     = "/club/:slug"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=region/:name"
+  to     = "/region/:name"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "/?p=county/:name"
+  to     = "/county/:name"
+  status = 301
+  force  = true
+
+# ── County pages: /county/:name → SPA ───────────────────────
+[[redirects]]
+  from   = "/county/:name"
+  to     = "/?p=county/:name"
+  status = 200
+
 # ── Path-based URL redirects (Item 7) ──────────────────────────
 # These clean URLs allow future migration away from hash routing
 # and enable Google to index each page as a distinct URL today

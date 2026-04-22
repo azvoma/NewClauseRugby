@@ -620,6 +620,11 @@ const SITE_OG_IMG = 'https://ukrugbyclubdirectory.co.uk/og-image.jpg';
 
 function setMeta(title, desc, keywords, url, schema, opts) {
   opts = opts || {};
+  // Strip legacy hash-prefix so canonicals use clean paths, not fragment URLs.
+  // e.g. '#club/st-annes-rugby-club' → 'club/st-annes-rugby-club'
+  //      '#home' → '' (homepage = site root)
+  url = (url || '').replace(/^#/, '');
+  if (url === 'home') url = '';
   document.title = title;
 
   // Helper — find or create a meta/link tag
