@@ -16,7 +16,7 @@
 //     so changes appear instantly.
 // ════════════════════════════════════════════════════════════════
 
-import CLUBS_META from './clubs_meta.json' assert { type: 'json' };
+import CLUBS_META from './clubs_meta.json' with { type: 'json' };
 
 const SITE      = 'https://ukrugbyclubdirectory.co.uk';
 const SITE_NAME = 'UK Rugby Club Directory';
